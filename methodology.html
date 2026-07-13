@@ -1,0 +1,200 @@
+<title>Methodology &middot; Atlas of Disaster West Virginia</title>
+<style>
+:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--calc:#0a6b4a;}
+@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--calc:#5fd6a5;}}
+:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--calc:#5fd6a5;}
+:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--calc:#0a6b4a;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 Arial,Helvetica,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:76rem;margin:0 auto;padding:2rem 1.25rem 5rem}
+.brand{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--head);font-weight:700;border-bottom:3px solid var(--head);padding-bottom:.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.brand a{color:var(--crimson);text-decoration:none;letter-spacing:.05em}
+.brand a:hover{text-decoration:underline}
+h1{font-size:2.2rem;margin:1.1rem 0 .2rem;color:var(--head);letter-spacing:-.02em}
+.sub{color:var(--ink);margin:0 0 1.6rem;max-width:60rem}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--head);margin:2.4rem 0 .3rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+.lede{font-size:.85rem;color:var(--grey);margin:.5rem 0 .9rem}
+.lede a{color:var(--crimson)}
+.tw{overflow-x:auto;border:1px solid var(--rule)}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{background:var(--bg);text-align:left;padding:.55rem .7rem;border-bottom:2px solid var(--head);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+td{padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:nth-child(even) td{background:var(--tint)}
+td.col{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;font-weight:700;white-space:nowrap}
+td.src a{color:var(--crimson)}
+td.src{font-size:.8rem}
+td.calc{font-size:.8rem}
+.tag{display:inline-block;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.1rem .35rem;border:1px solid currentColor;white-space:nowrap}
+.t-sp{color:var(--calc)}
+.t-dv{color:var(--crimson)}
+.t-none{color:var(--grey)}
+.warn{background:var(--tint);border-left:3px solid var(--crimson);padding:.9rem 1.1rem;margin:1.2rem 0;font-size:.87rem}
+.warn b{color:var(--ink)}
+.note{background:var(--tint);border-left:3px solid var(--grey);padding:.8rem 1rem;font-size:.85rem;color:var(--grey);margin:1.2rem 0}
+.note b{color:var(--ink)}
+.key{display:flex;gap:1.2rem;flex-wrap:wrap;font-size:.78rem;color:var(--grey);margin:.8rem 0 0}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;background:var(--tint);padding:.05rem .25rem}
+footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:.76rem;color:var(--grey);line-height:1.7}
+footer b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+<div class="brand">
+  <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
+  <a href="./">&larr; Back to the county table</a>
+</div>
+
+<h1>Methodology</h1>
+<p class="sub">Every column in <code>wv_county_master.csv</code>: what it is, where it came from, and what analysis produced it. 55 counties, 55 columns, joined on 5-digit county FIPS.</p>
+
+<div class="key">
+  <span><span class="tag t-none">Direct</span> value taken from the source, unchanged</span>
+  <span><span class="tag t-dv">Derived</span> arithmetic or a lookup</span>
+  <span><span class="tag t-sp">Spatial</span> geometry operation on the polygons</span>
+</div>
+
+<div class="warn">
+<b>Before publishing any floodplain figure, confirm the source and vintage of the floodplain layer.</b>
+<code>wv_floodplain.geojson</code> carries a single attribute, <code>zone = SFHA</code>, and <b>no effective date, no NFHL panel reference, and no flood-zone breakdown</b>. "SFHA" is FEMA's Special Flood Hazard Area, which is by definition the 1% annual chance floodplain (the "100-year floodplain"), so that is what is being measured. Which edition of the map it was cut from is not recorded anywhere in the file. The same gap applies to the buyout, repetitive-loss, and watershed layers. The National Risk Index is the only layer that self-documents its version (December 2025).
+</div>
+
+<h2>Spatial analysis performed</h2>
+<p class="lede">Four operations produced the columns that did not exist in any source. All geometry work was done in <b>EPSG:5070 (CONUS Albers equal-area)</b>, because area cannot be measured correctly in latitude and longitude degrees. Source files are EPSG:4326.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:14rem">Operation</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td class="col">Point-in-polygon join</td><td>Each of the 2,826 buyout points is tested against the 55 county polygons and assigned to the county that contains it. Used because the source community field mixes county names ("McDowell County*") with town names ("Welch") across 111 values and is not a reliable key. <b>All 2,826 points fell inside a West Virginia county, none unmatched</b>, which confirms the join.</td></tr>
+<tr><td class="col">Polygon intersection</td><td>The statewide floodplain polygon is clipped against each county polygon, and the area of the resulting overlap is measured. The floodplain layer is <b>not topologically valid</b> (self-intersections at shared edges, common in FEMA flood layers), so each part is repaired with <code>make_valid</code> before the layers are dissolved and clipped.</td></tr>
+<tr><td class="col">Polygon overlap</td><td>Each county is overlapped against the 33 HUC-8 watersheds. The watershed with the largest overlap becomes the county's primary watershed. <b>An overlap must cover at least 1% of the county to count.</b> Without that threshold, all 8 Eastern Panhandle counties appear to span both basins on 0.0 to 0.2% slivers along the continental divide, which is a geometry artifact rather than a fact. With it, only Monroe County genuinely spans both.</td></tr>
+<tr><td class="col">Area measurement</td><td>County and floodplain areas are measured in equal-area projection and converted to square miles. Cross-check: county areas sum to 24,475 sq mi against West Virginia's actual ~24,230, about 1% over, which is the expected error from polygon generalization.</td></tr>
+</tbody>
+</table></div>
+
+<h2>Identity</h2>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">GEOID</td><td>5-digit county FIPS code, zero-padded. The join key for every layer.</td><td class="src">U.S. Census Bureau</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">COUNTY</td><td>County name.</td><td class="src">FEMA National Risk Index</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">STATE</td><td>Always "West Virginia".</td><td class="src">&mdash;</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+</tbody>
+</table></div>
+
+<h2>Atlas of Accountability core, 2011 to 2024</h2>
+<p class="lede">Disaster declarations and federal recovery funding. These columns were fact-checked against the <b>FINAL Atlas of Accountability 2011-2024 Workbook, County Level 2024 tab</b>, and reconcile exactly on all 55 counties. West Virginia totals: <b>268 declarations, $225,705,731 FEMA PA+HM</b>. Source: <a href="https://rebuildbydesign.org/atlas-of-disaster/">Atlas of Disaster</a>, built on <a href="https://www.fema.gov/openfema">FEMA OpenFEMA</a>.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">DISASTER_COUNT_2011_2024</td><td>Federal major disaster declarations affecting the county, 2011 to 2024. Excludes non-weather declarations and extreme heat, which rarely triggers a declaration under the Stafford Act.</td><td class="src"><a href="https://www.fema.gov/openfema">FEMA OpenFEMA</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FEMA_PA_HM</td><td>FEMA Public Assistance plus Hazard Mitigation obligated to the county, in dollars. County-allocated only. <b>HUD CDBG-DR is not included</b>, because it is allocated to states and no county figure exists.</td><td class="src"><a href="https://www.fema.gov/openfema">FEMA OpenFEMA</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FEMA_PER_CAPITA</td><td>FEMA PA+HM divided by 2024 population.</td><td class="src">Atlas of Accountability</td><td class="calc"><span class="tag t-dv">Derived</span> FEMA_PA_HM / POPULATION</td></tr>
+<tr><td class="col">POPULATION</td><td>County population, 2024.</td><td class="src"><a href="https://www.census.gov/programs-surveys/acs">Census ACS</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">CDC_SVI_2022</td><td>CDC Social Vulnerability Index, 0 to 1. A percentile: 0.90 means more vulnerable than 90% of U.S. counties.</td><td class="src"><a href="https://www.atsdr.cdc.gov/placeandhealth/svi/">CDC/ATSDR SVI 2022</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">OMB_CLASS</td><td>Urban or Rural. Urban means a core urban area over 50,000 people.</td><td class="src">OMB Bulletin 23-01</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">SAIDI_MIN_AVG</td><td>Average annual power-outage minutes per customer, 2023. Includes major event days.</td><td class="src"><a href="https://www.eia.gov/electricity/data/eia861/">EIA-861</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">SAIDI_MIN_MAX</td><td>Worst utility's outage minutes in the county, where more than one utility serves it.</td><td class="src"><a href="https://www.eia.gov/electricity/data/eia861/">EIA-861</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">PCT_POP_60PLUS</td><td>Share of residents aged 60 or over. <b>Rounded to one decimal. Do not use it for thresholding</b>: 27 U.S. counties land on exactly 25.0 and 14 of those are really below it.</td><td class="src"><a href="https://www.census.gov/programs-surveys/acs">Census ACS</a></td><td class="calc"><span class="tag t-dv">Derived</span> 60+ population / total population</td></tr>
+<tr><td class="col">AGE_CLASS</td><td>Below Average (under 25% aged 60+), Aging County (25%+), Aged County (30%+), Super-Aged (35%+), Majority Senior (50%+). Computed at full precision, so this is the safe field to filter on.</td><td class="src">Atlas of Accountability</td><td class="calc"><span class="tag t-dv">Derived</span> thresholds on the exact 60+ share</td></tr>
+<tr><td class="col">PCT_MINORITY</td><td>Share of residents who are people of color.</td><td class="src"><a href="https://www.atsdr.cdc.gov/placeandhealth/svi/">CDC SVI 2022</a>, field EP_MINRTY</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">HEAT_NRI</td><td>Heat risk score, 0 to 100. <b>Heat is measured here but is not in the disaster count</b>, because the Stafford Act ties declarations to physical damage and heat rarely produces it. The two measure different things and must not be conflated.</td><td class="src"><a href="https://hazards.fema.gov/nri/">FEMA National Risk Index</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">COMPOUND_RISK_COUNT_NATL</td><td>How many of four <b>national</b> severity thresholds the county trips: 10+ declarations, NRI top quartile, SVI top quartile, heat top quartile. Because the thresholds are national, this discriminates weakly within West Virginia.</td><td class="src">Atlas of Accountability</td><td class="calc"><span class="tag t-dv">Derived</span> count of four national threshold tests</td></tr>
+</tbody>
+</table></div>
+
+<h2>FEMA National Risk Index, composite</h2>
+<p class="lede">Version <b>December 2025</b>, self-declared in the source file. Source: <a href="https://hazards.fema.gov/nri/">FEMA National Risk Index</a>. Every field here is taken directly from FEMA. <b>NRI ratings are relative, not absolute</b>: a county rated "Relatively Low" can still sit high on the national loss-rate percentile.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">NRI_POP_2020</td><td>County population as used by the NRI model (2020).</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_AREA_SQMI</td><td>County land area in square miles, as FEMA reports it.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_BUILDING_VALUE</td><td>Total value of buildings exposed, in dollars.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_AGRICULTURE_VALUE</td><td>Total agricultural value exposed, in dollars.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_SCORE_COMPOSITE</td><td>Overall risk score across all 18 hazards, 0 to 100.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_RATING_COMPOSITE</td><td>The score as a label: Very Low through Very High.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_EAL_TOTAL_COMPOSITE</td><td>Expected Annual Loss across all hazards, in dollars per year. A modelled estimate, not observed loss.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_SOVI_SCORE</td><td>Social vulnerability score in FEMA's own model. Distinct from CDC SVI.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_SOVI_RATING</td><td>That score as a label.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_RESILIENCE_SCORE</td><td>Community resilience score: capacity to prepare for and recover from hazards.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">NRI_RESILIENCE_RATING</td><td>That score as a label.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+</tbody>
+</table></div>
+
+<h2>Flood risk and flood loss</h2>
+<p class="lede">FEMA calls this hazard <b>Inland Flooding</b>, not "riverine". All fields come directly from the NRI county file. The event record runs about <b>28 years</b> deep. These columns reproduce the separate <code>wv_nri_flood.geojson</code> extract exactly on all 55 counties, which confirms that file is a derived copy rather than an independent source.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">FLOOD_RISK_SCORE</td><td>Inland flooding risk score, 0 to 100. FEMA's Hazard Type Risk Index, combining expected loss, social vulnerability, and community resilience.</td><td class="src"><a href="https://hazards.fema.gov/nri/inland-flooding">FEMA NRI, Inland Flooding</a></td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_RISK_RATING</td><td>That score as a label, Very Low through Very High. Relative, not absolute.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EAL_TOTAL</td><td><b>Flood loss per year.</b> FEMA's Expected Annual Loss from inland flooding, in dollars per year, across buildings, population, and agriculture. An actuarial model output, <b>not observed losses</b>.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EAL_SCORE</td><td>That loss expressed as a 0 to 100 score.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EAL_RATING</td><td>That score as a label.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EAL_NATL_PCTILE</td><td><b>National</b> percentile of the county's flood loss rate. <b>Use this, not the rating, when comparing West Virginia against the country.</b> WV counties often look mild on the in-state rating and severe on this.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EVENTS</td><td>Number of recorded inland flooding events in the county.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_ANNUAL_FREQ</td><td>Events per year. Dividing events by frequency gives roughly a 28-year record.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_IMPACTED_AREA_SQMI</td><td>Area of the county FEMA models as flood-exposed, in square miles. <b>Not the same as the SFHA floodplain below</b>; it is a model output rather than a mapped flood zone.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_EXPOSURE_TOTAL</td><td>Total value exposed to inland flooding, in dollars.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+<tr><td class="col">FLOOD_HIST_LOSS_RATING</td><td>Historic loss ratio rating: how much of what was exposed was actually lost, historically.</td><td class="src">FEMA NRI</td><td class="calc"><span class="tag t-none">Direct</span></td></tr>
+</tbody>
+</table></div>
+
+<h2>Floodplain</h2>
+<p class="lede">These two columns <b>did not exist at county level in any source</b>. The floodplain arrives as a single statewide polygon with no county boundaries in it. Both were produced by clipping that polygon against each county and measuring the result.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">SFHA_AREA_SQMI</td><td>Square miles of the county inside FEMA's Special Flood Hazard Area, the 1% annual chance ("100-year") floodplain. Statewide this totals 781 sq mi, <b>3.2% of West Virginia</b>.</td><td class="src"><a href="https://www.fema.gov/flood-maps/national-flood-hazard-layer">FEMA National Flood Hazard Layer</a> (<b>vintage not recorded in the file</b>)</td><td class="calc"><span class="tag t-sp">Spatial</span> Reproject to EPSG:5070 equal-area, repair invalid geometry with <code>make_valid</code>, dissolve, intersect with the county polygon, measure the area of the overlap.</td></tr>
+<tr><td class="col">PCT_COUNTY_IN_SFHA</td><td>That area as a share of the whole county. Mason County leads the state at 9.85%.</td><td class="src">Derived from the layer above</td><td class="calc"><span class="tag t-sp">Spatial</span> SFHA_AREA_SQMI divided by the county's own area, both measured in the same equal-area projection.</td></tr>
+</tbody>
+</table></div>
+
+<h2>Buyouts</h2>
+<p class="lede">2,826 individual buyout properties, each a point on the map. The source community field is not a usable county key, so every point was placed by geometry. <b>All 2,826 fell inside a West Virginia county, none unmatched.</b></p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">BUYOUTS_TOTAL</td><td>All buyout properties in the county, any program. McDowell County holds 708 of the state's 2,826, more than double any other county.</td><td class="src">FEMA, USACE, NRCS, HUD buyout records (<b>source file carries no date</b>)</td><td class="calc"><span class="tag t-sp">Spatial</span> Point-in-polygon join of each point to its county, then counted.</td></tr>
+<tr><td class="col">BUYOUTS_FEMA</td><td>Properties bought out under FEMA programs. Includes 39 records marked "FEMA?" in the source, which were counted as FEMA.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, filtered to program = FEMA.</td></tr>
+<tr><td class="col">BUYOUTS_USACE</td><td>U.S. Army Corps of Engineers buyouts.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, filtered by program.</td></tr>
+<tr><td class="col">BUYOUTS_NRCS</td><td>Natural Resources Conservation Service buyouts.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, filtered by program.</td></tr>
+<tr><td class="col">BUYOUTS_HUD</td><td>HUD buyouts.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, filtered by program.</td></tr>
+<tr><td class="col">BUYOUTS_COMMUNITY</td><td>Community-funded buyouts.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, filtered by program.</td></tr>
+<tr><td class="col">BUYOUT_YEAR_MIN</td><td>Earliest recorded buyout year in the county. <b>Blank for 16 counties.</b></td><td class="src">Buyout records</td><td class="calc"><span class="tag t-dv">Derived</span> Minimum of the year field, <b>but the year is missing for 1,264 of 2,826 properties (45%). Do not build a buyout time series from this.</b></td></tr>
+<tr><td class="col">BUYOUT_YEAR_MAX</td><td>Latest recorded buyout year. Same 45% gap applies.</td><td class="src">Buyout records</td><td class="calc"><span class="tag t-dv">Derived</span> Maximum of the year field, subject to the same gap.</td></tr>
+</tbody>
+</table></div>
+
+<h2>Repetitive loss</h2>
+<p class="lede">FEMA-designated repetitive-loss <b>areas</b>, not individual properties. These are not a count of flooded homes. Only <b>11 of 55 counties</b> have any.</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">REPETITIVE_LOSS_AREAS</td><td>Number of repetitive-loss areas in the county. 55 statewide. Morgan 9, Greenbrier 8, Jefferson 7, Berkeley 6.</td><td class="src">FEMA repetitive-loss areas (<b>source file carries no date</b>)</td><td class="calc"><span class="tag t-dv">Derived</span> Grouped and counted by the county attribute already present on each area. <b>No spatial work needed</b>, because the source already assigns each area to a county.</td></tr>
+<tr><td class="col">REPETITIVE_LOSS_STREAMS</td><td>Named streams driving the repetitive loss, for example the Shenandoah River.</td><td class="src">FEMA repetitive-loss areas</td><td class="calc"><span class="tag t-dv">Derived</span> Distinct stream names per county, concatenated.</td></tr>
+</tbody>
+</table></div>
+
+<h2>Watershed and basin</h2>
+<p class="lede">33 HUC-8 watersheds. Basin comes from the HUC-8 prefix: <b>02 is Mid-Atlantic (Chesapeake Bay), 05 is Ohio River</b>. West Virginia splits <b>47 Ohio River counties to 8 Chesapeake Bay counties</b>. Source: <a href="https://www.usgs.gov/national-hydrography/watershed-boundary-dataset">USGS Watershed Boundary Dataset</a> (vintage not recorded in the file).</p>
+<div class="tw"><table>
+<thead><tr><th style="width:15rem">Column</th><th>Description</th><th style="width:14rem">Source</th><th style="width:20rem">Analysis</th></tr></thead>
+<tbody>
+<tr><td class="col">PRIMARY_WATERSHED</td><td>The HUC-8 watershed covering the largest share of the county.</td><td class="src">USGS WBD</td><td class="calc"><span class="tag t-sp">Spatial</span> County overlapped against all 33 watersheds in equal-area projection; the largest overlap wins.</td></tr>
+<tr><td class="col">PRIMARY_HUC8</td><td>The 8-digit hydrologic unit code of that watershed.</td><td class="src">USGS WBD</td><td class="calc"><span class="tag t-sp">Spatial</span> As above.</td></tr>
+<tr><td class="col">BASIN</td><td>Ohio River or Chesapeake Bay. The Chesapeake counties are Berkeley, Grant, Hampshire, Hardy, Jefferson, Mineral, Morgan, and Pendleton.</td><td class="src">USGS WBD</td><td class="calc"><span class="tag t-dv">Derived</span> Read from the first two digits of the primary HUC-8 code.</td></tr>
+<tr><td class="col">SPANS_BOTH_BASINS</td><td>Whether the county falls meaningfully in both basins. <b>Only Monroe County does</b>, reaching the Upper James.</td><td class="src">USGS WBD</td><td class="calc"><span class="tag t-sp">Spatial</span> A second basin must cover <b>at least 1%</b> of the county. Without that floor, all 8 Eastern Panhandle counties falsely appear to span both, on 0.0 to 0.2% slivers along the continental divide.</td></tr>
+<tr><td class="col">ALL_WATERSHEDS</td><td>Every HUC-8 overlapping the county by 1% or more, largest first.</td><td class="src">USGS WBD</td><td class="calc"><span class="tag t-sp">Spatial</span> As above, all qualifying overlaps listed.</td></tr>
+</tbody>
+</table></div>
+
+<div class="note">
+<b>Reproducing all of it.</b> Every calculated column is produced by one script, <code>tools/build_wv_master.py</code>. Run <code>pip install shapely pyproj</code> then <code>python3 tools/build_wv_master.py</code>. Nothing was done by hand, in Excel, or in QGIS, so there are no manual steps to trust.
+</div>
+
+<footer>
+<b>Open questions before publication.</b> The floodplain, buyout, repetitive-loss, and watershed layers carry no source or date metadata. The floodplain vintage in particular needs to be confirmed before any floodplain percentage is published. The National Risk Index is the only layer that declares its own version (December 2025).<br>
+<b>Two FEMA totals, both correct, easily confused.</b> West Virginia's total FEMA PA+HM is <b>$694,455,589</b>. The county-allocated portion, which is what <code>FEMA_PA_HM</code> sums to, is <b>$225,705,731</b>. They are different measures and should not be used interchangeably.<br>
+<a href="./">Back to the county table</a> &middot; <a href="https://github.com/judy-huynh/atlas-west-virginia">Repository</a>
+</footer>
+</div>
