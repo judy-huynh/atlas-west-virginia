@@ -1,0 +1,88 @@
+<style>
+:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--ohio:#2171b5;--ches:#238b45;}
+@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--ohio:#6baed6;--ches:#66c2a4;}}
+:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--ohio:#6baed6;--ches:#66c2a4;}
+:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--ohio:#2171b5;--ches:#238b45;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Arial,Helvetica,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:72rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+.brand{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--head);font-weight:700;border-bottom:3px solid var(--head);padding-bottom:.5rem}
+h1{font-size:2.2rem;margin:1.1rem 0 .2rem;color:var(--head);letter-spacing:-.02em}
+.sub{color:var(--ink);margin:0 0 1.5rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1.5rem}
+.st{background:var(--card);padding:.9rem 1rem}
+.st b{display:block;font-size:1.6rem;color:var(--crimson);line-height:1.1}
+.st span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--grey);margin-top:.25rem}
+.ctl{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem}
+input,select{font:inherit;font-size:.85rem;padding:.45rem .6rem;border:1px solid var(--rule);background:var(--card);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--crimson);outline-offset:1px}
+.tw{overflow-x:auto;border:1px solid var(--rule)}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{position:sticky;top:0;background:var(--bg);text-align:left;padding:.55rem .6rem;border-bottom:2px solid var(--head);white-space:nowrap;cursor:pointer;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;user-select:none}
+th:hover{color:var(--crimson)}
+th.s::after{content:" \2193";color:var(--crimson)}
+th.s.a::after{content:" \2191"}
+td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);white-space:nowrap}
+tr:nth-child(even) td{background:var(--tint)}
+td.num{text-align:right}
+.pill{display:inline-block;padding:.1rem .45rem;font-size:.72rem;font-weight:700;border:1px solid currentColor}
+.ohio{color:var(--ohio)}.ches{color:var(--ches)}
+.hi{color:var(--crimson);font-weight:700}
+footer{margin-top:1.5rem;font-size:.74rem;color:var(--grey);line-height:1.6}
+footer b{color:var(--ink)}
+</style>
+<div class="wrap">
+<div class="brand">Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</div>
+<h1>WV County Master</h1>
+<p class="sub">All 55 counties. Flood, hazard, buyout, and Atlas data in one table. Click any column to sort.</p>
+<div class="stats" id="stats"></div>
+<div class="ctl">
+  <input id="q" type="search" placeholder="Filter counties..." style="flex:1;min-width:12rem">
+  <select id="basin"><option value="">All basins</option><option>Ohio River</option><option>Chesapeake Bay</option></select>
+  <select id="cls"><option value="">Urban and rural</option><option>Rural</option><option>Urban</option></select>
+</div>
+<div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+<footer>
+<b>Source.</b> <b>wv_county_master.csv</b>, built from NRI_Counties_WV.geojson, wv_buyouts.geojson (2,826 points, spatially joined),
+wv_repetitive_loss.geojson, wv_watersheds.geojson, wv_floodplain.geojson, and the Atlas of Accountability county master.
+Area math in EPSG:5070 equal-area.<br>
+<b>Read the limitations.</b> Buyout years are missing for 45% of properties. Data centers, coal plants, mining, and corporate
+landownership are <b>not</b> in this file. See DATA_DICTIONARY.md.
+</footer>
+</div>
+<script>
+const D={"cols": [{"k": "COUNTY", "l": "County", "t": "t"}, {"k": "BASIN", "l": "Basin", "t": "t"}, {"k": "DISASTER_COUNT_2011_2024", "l": "Disasters", "t": "n"}, {"k": "FEMA_PA_HM", "l": "FEMA $", "t": "m"}, {"k": "BUYOUTS_TOTAL", "l": "Buyouts", "t": "n"}, {"k": "REPETITIVE_LOSS_AREAS", "l": "Rep. loss", "t": "n"}, {"k": "PCT_COUNTY_IN_SFHA", "l": "% in floodplain", "t": "p"}, {"k": "FLOOD_RISK_RATING", "l": "Flood risk", "t": "t"}, {"k": "FLOOD_EAL_TOTAL", "l": "Flood loss/yr", "t": "m"}, {"k": "SAIDI_MIN_AVG", "l": "Outage min/yr", "t": "n"}, {"k": "CDC_SVI_2022", "l": "SVI", "t": "d"}, {"k": "PCT_POP_60PLUS", "l": "% 60+", "t": "p"}, {"k": "OMB_CLASS", "l": "Class", "t": "t"}], "rows": [["Barbour", "Ohio River", "3", "429404", "46", "0", "2.78", "Relatively Low", "6559412", "744.0", "0.46", "28.7", "Rural"], ["Berkeley", "Chesapeake Bay", "1", "198704", "0", "6", "4.39", "Relatively Moderate", "25150694", "200.7", "0.27", "21.7", "Urban"], ["Boone", "Ohio River", "8", "401380", "2", "0", "1.94", "Relatively Moderate", "17321712", "689.5", "0.4", "30.5", "Rural"], ["Braxton", "Ohio River", "6", "166796", "1", "0", "2.92", "Relatively Low", "7774231", "744.0", "0.6", "32.9", "Rural"], ["Brooke", "Ohio River", "4", "2051978", "15", "0", "5.98", "Relatively Moderate", "11598165", "607.7", "0.38", "34.9", "Rural"], ["Cabell", "Ohio River", "9", "11891820", "10", "0", "6.71", "Relatively Moderate", "41077031", "568.3", "0.73", "25.9", "Urban"], ["Calhoun", "Ohio River", "4", "41308", "1", "0", "3.1", "Relatively Low", "4413556", "744.0", "0.47", "35.1", "Rural"], ["Clay", "Ohio River", "5", "29286138", "0", "0", "2.13", "Relatively Low", "4360694", "707.7", "0.54", "31.3", "Rural"], ["Doddridge", "Ohio River", "7", "67428", "0", "0", "2.08", "Relatively Low", "5679120", "760.5", "0.26", "27.6", "Rural"], ["Fayette", "Ohio River", "6", "5833905", "297", "4", "1.6", "Relatively Low", "12084524", "707.7", "0.7", "29.8", "Rural"], ["Gilmer", "Ohio River", "5", "16726", "4", "0", "2.49", "Relatively Low", "5390674", "744.0", "0.48", "25.9", "Rural"], ["Grant", "Chesapeake Bay", "3", "95138", "2", "0", "2.33", "Relatively Low", "6461281", "387.7", "0.27", "32.3", "Rural"], ["Greenbrier", "Ohio River", "4", "16234369", "332", "8", "3.03", "Relatively Moderate", "18191433", "707.7", "0.45", "33.7", "Rural"], ["Hampshire", "Chesapeake Bay", "1", "218450", "0", "0", "5.4", "Relatively Low", "8606762", "200.7", "0.47", "33.2", "Rural"], ["Hancock", "Ohio River", "3", "42943", "15", "0", "6.78", "Relatively Low", "10527227", "594.6", "0.3", "32.3", "Rural"], ["Hardy", "Chesapeake Bay", "2", "195513", "20", "0", "4.22", "Relatively Low", "8748701", "200.7", "0.39", "31.9", "Rural"], ["Harrison", "Ohio River", "8", "5204089", "39", "0", "2.63", "Relatively Moderate", "25107162", "760.5", "0.47", "27.9", "Urban"], ["Jackson", "Ohio River", "6", "117957", "13", "0", "5.02", "Relatively Moderate", "13595017", "612.2", "0.29", "28.2", "Rural"], ["Jefferson", "Chesapeake Bay", "2", "111904", "6", "7", "5.95", "Relatively Low", "12836862", "183.6", "0.22", "24.1", "Urban"], ["Kanawha", "Ohio River", "9", "51590893", "267", "0", "3.33", "Relatively High", "132659912", "689.5", "0.53", "29.4", "Urban"], ["Lewis", "Ohio River", "5", "290153", "0", "0", "2.66", "Relatively Low", "10843777", "744.0", "0.56", "27.2", "Rural"], ["Lincoln", "Ohio River", "12", "4764516", "62", "0", "2.54", "Relatively Moderate", "13461170", "689.5", "0.4", "29.5", "Rural"], ["Logan", "Ohio River", "7", "1978895", "57", "0", "1.32", "Relatively Moderate", "26623117", "689.5", "0.66", "29.3", "Rural"], ["McDowell", "Ohio River", "3", "2248847", "708", "4", "0.95", "Relatively Moderate", "14244903", "689.5", "0.87", "29.9", "Rural"], ["Marion", "Ohio River", "2", "484250", "6", "0", "2.36", "Relatively Moderate", "26690407", "760.5", "0.44", "26.7", "Urban"], ["Marshall", "Ohio River", "7", "30411816", "0", "0", "4.23", "Relatively Moderate", "16022903", "598.1", "0.22", "32.4", "Rural"], ["Mason", "Ohio River", "4", "250034", "10", "0", "9.85", "Relatively Moderate", "13379394", "854.2", "0.28", "30.3", "Rural"], ["Mercer", "Ohio River", "3", "26389", "32", "3", "1.94", "Relatively Moderate", "13560712", "689.5", "0.73", "29.5", "Urban"], ["Mineral", "Chesapeake Bay", "2", "1225938", "20", "0", "3.54", "Relatively Moderate", "13255085", "387.7", "0.21", "30.0", "Rural"], ["Mingo", "Ohio River", "6", "1049331", "132", "0", "1.36", "Relatively Moderate", "15464635", "699.0", "0.68", "29.5", "Rural"], ["Monongalia", "Ohio River", "4", "38963", "6", "0", "2.62", "Relatively Moderate", "31357089", "647.0", "0.33", "18.2", "Urban"], ["Monroe", "Ohio River", "2", "4076977", "23", "0", "1.72", "Relatively Low", "4376591", "707.7", "0.39", "33.6", "Rural"], ["Morgan", "Chesapeake Bay", "1", "99153", "17", "9", "4.03", "Relatively Low", "6138444", "200.7", "0.18", "33.1", "Rural"], ["Nicholas", "Ohio River", "5", "29937575", "14", "5", "2.71", "Relatively Low", "8274268", "707.7", "0.28", "32.1", "Rural"], ["Ohio", "Ohio River", "5", "1363159", "4", "0", "5.19", "Relatively Moderate", "29501434", "607.7", "0.47", "30.4", "Rural"], ["Pendleton", "Chesapeake Bay", "4", "32162", "0", "0", "2.81", "Relatively Low", "8588702", "336.5", "0.27", "37.3", "Rural"], ["Pleasants", "Ohio River", "4", "44970", "0", "0", "6.38", "Relatively Low", "5128454", "535.0", "0.43", "25.4", "Rural"], ["Pocahontas", "Ohio River", "3", "96990", "6", "2", "2.04", "Relatively Low", "5570744", "744.0", "0.55", "36.7", "Rural"], ["Preston", "Ohio River", "7", "1128780", "0", "0", "1.98", "Relatively Low", "7522016", "395.8", "0.46", "27.6", "Rural"], ["Putnam", "Ohio River", "4", "296346", "2", "0", "5.19", "Relatively Moderate", "29906532", "689.5", "0.08", "27.0", "Urban"], ["Raleigh", "Ohio River", "3", "793423", "23", "0", "2.21", "Relatively Moderate", "16486472", "707.7", "0.79", "28.3", "Urban"], ["Randolph", "Ohio River", "6", "3697968", "35", "0", "3.78", "Relatively Moderate", "17584923", "387.7", "0.52", "30.9", "Rural"], ["Ritchie", "Ohio River", "5", "55841", "0", "0", "2.13", "Relatively Low", "5333405", "744.0", "0.26", "32.3", "Rural"], ["Roane", "Ohio River", "9", "3260289", "50", "0", "1.43", "Relatively Low", "8777733", "707.7", "0.61", "32.1", "Rural"], ["Summers", "Ohio River", "4", "379820", "4", "3", "5.13", "Relatively Low", "5803847", "707.7", "0.68", "36.4", "Rural"], ["Taylor", "Ohio River", "5", "25808", "2", "0", "3.58", "Relatively Low", "6975502", "744.0", "0.35", "28.1", "Rural"], ["Tucker", "Ohio River", "5", "822915", "50", "0", "4.51", "Relatively Low", "3992258", "387.7", "0.26", "37.1", "Rural"], ["Tyler", "Ohio River", "7", "347316", "0", "0", "5.71", "Relatively Low", "6251641", "615.7", "0.13", "33.4", "Rural"], ["Upshur", "Ohio River", "4", "1947775", "48", "0", "2.12", "Relatively Low", "10082260", "744.0", "0.6", "29.3", "Rural"], ["Wayne", "Ohio River", "9", "1129755", "87", "0", "3.83", "Relatively Moderate", "26365596", "605.8", "0.37", "29.7", "Rural"], ["Webster", "Ohio River", "5", "3350376", "0", "0", "2.55", "Relatively Low", "5163810", "744.0", "0.49", "34.1", "Rural"], ["Wetzel", "Ohio River", "7", "2029407", "14", "0", "2.8", "Relatively Moderate", "15239947", "598.1", "0.32", "29.8", "Rural"], ["Wirt", "Ohio River", "4", "19845", "0", "0", "4.5", "Relatively Low", "3632170", "744.0", "0.26", "32.7", "Rural"], ["Wood", "Ohio River", "6", "3413247", "81", "0", "8.4", "Relatively Moderate", "33065029", "535.0", "0.39", "29.3", "Urban"], ["Wyoming", "Ohio River", "3", "389885", "263", "4", "1.47", "Relatively Moderate", "15780314", "689.5", "0.52", "31.1", "Rural"]]}, T={"counties": 55, "buyouts": 2826, "rl": 55, "fema": 225705757.0, "dis": 268.0, "sfha": 781.31};
+document.getElementById('stats').innerHTML=[
+ [T.counties,'Counties'],[T.dis.toLocaleString(),'Disaster declarations'],
+ ['$'+(T.fema/1e6).toFixed(1)+'M','FEMA PA + HM'],[T.buyouts.toLocaleString(),'Buyout properties'],
+ [T.rl,'Repetitive loss areas'],[Math.round(T.sfha)+' sq mi','In floodplain']
+].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+const fmt=(v,t)=>{if(v===''||v==null)return '<span style="color:var(--grey)">&ndash;</span>';
+ if(t==='m')return '$'+(+v>=1e6?(+v/1e6).toFixed(1)+'M':(+v/1e3).toFixed(0)+'K');
+ if(t==='p')return (+v).toFixed(1)+'%'; if(t==='d')return (+v).toFixed(2);
+ if(t==='n')return (+v).toLocaleString();
+ if(v==='Ohio River')return '<span class="pill ohio">Ohio</span>';
+ if(v==='Chesapeake Bay')return '<span class="pill ches">Chesapeake</span>';
+ return v;};
+let sort=2, asc=false;
+document.getElementById('th').innerHTML='<tr>'+D.cols.map((c,i)=>`<th data-i="${i}">${c.l}</th>`).join('')+'</tr>';
+function draw(){
+ const q=document.getElementById('q').value.toLowerCase();
+ const b=document.getElementById('basin').value, cl=document.getElementById('cls').value;
+ let r=D.rows.filter(x=>(!q||x[0].toLowerCase().includes(q))&&(!b||x[1]===b)&&(!cl||x[12]===cl));
+ const t=D.cols[sort].t;
+ r.sort((a,c)=>{let x=a[sort],y=c[sort];
+  if(t==='t'){return asc?String(x).localeCompare(y):String(y).localeCompare(x);}
+  x=parseFloat(x)||0;y=parseFloat(y)||0;return asc?x-y:y-x;});
+ const max={};D.cols.forEach((c,i)=>{if(c.t!=='t')max[i]=Math.max(...D.rows.map(x=>parseFloat(x[i])||0));});
+ document.getElementById('tb').innerHTML=r.map(x=>'<tr>'+x.map((v,i)=>{
+  const c=D.cols[i], num=c.t!=='t';
+  const hi=num&&max[i]&&parseFloat(v)===max[i]&&max[i]>0?' hi':'';
+  return `<td class="${num?'num':''}${hi}">${fmt(v,c.t)}</td>`;}).join('')+'</tr>').join('');
+ document.querySelectorAll('th').forEach((h,i)=>{h.className=i===sort?('s'+(asc?' a':'')):'';});
+}
+document.querySelectorAll('th').forEach(h=>h.onclick=()=>{const i=+h.dataset.i;
+ if(i===sort)asc=!asc;else{sort=i;asc=D.cols[i].t==='t';}draw();});
+['q','basin','cls'].forEach(id=>document.getElementById(id).oninput=draw);
+draw();
+</script>
