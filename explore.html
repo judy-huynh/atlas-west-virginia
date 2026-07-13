@@ -83,10 +83,12 @@ tbody tr.hit:hover td{background:var(--hit);filter:brightness(.98)}
 tbody tr.miss td,
 tbody tr.miss:nth-child(even) td{background:var(--bg);color:var(--dim)}
 tbody tr.miss .pill{border-color:var(--dim);color:var(--dim)}
+tbody tr.miss .pill.bad{background:none;border-color:var(--dim);color:var(--dim)}
 tbody tr.miss:hover td{background:var(--tint);color:var(--grey)}
 
-.pill{display:inline-block;padding:.05rem .35rem;font-size:.68rem;font-weight:700;border:1px solid var(--on);color:var(--on)}
-tbody tr.hit .pill{background:var(--on);color:#fff;border-color:var(--on)}
+.pill{display:inline-block;padding:.05rem .4rem;font-size:.7rem;font-weight:700;border:1px solid var(--dim);color:var(--grey)}
+.pill.bad{background:var(--on);border-color:var(--on);color:#fff}
+tbody tr.hit .pill.bad{background:var(--on);color:#fff;border-color:var(--on)}
 tr.ev td{background:var(--hit);white-space:normal;cursor:default;border-bottom-color:var(--hitline)}
 tr.ev td:first-child{box-shadow:inset 4px 0 0 var(--on)}
 .ev-box .h{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--on);font-weight:700}
@@ -243,9 +245,23 @@ function renderFacs(){
 
 document.getElementById('reset').onclick=()=>{sel=new Set();open=null;draw();};
 
-const COLS=[['c','County','t'],['natl','Natl flood %ile','n'],['pc','FEMA/person','m'],['dis','Disasters','n'],
-  ['rl','Rep. loss','n'],['fp','% floodplain','p'],['buy','Buyouts','n'],['svi','SVI','d'],
-  ['saidi','Outage min','n'],['old','% 60+','p']];
+// Same column order as the County Risk Profile table.
+// Atlas of Accountability data first, then flood and hazard data.
+const COLS=[
+  ['c',    'County',          't'],
+  ['dis',  'Disasters',       'n'],
+  ['fema', 'FEMA $',          'm'],
+  ['pc',   'FEMA/person',     'm'],
+  ['svi',  'SVI',             'd'],
+  ['saidi','Outage min/yr',   'n'],
+  ['old',  '% 60+',           'p'],
+  ['rate', 'Flood risk',      't'],
+  ['natl', 'Natl flood %ile', 'x'],
+  ['fp',   '% in floodplain', 'p'],
+  ['rl',   'Rep. loss',       'n'],
+  ['buy',  'Buyouts',         'n'],
+  ['eal',  'Flood loss/yr',   'm'],
+];
 function buildCols(){
 document.getElementById('th').innerHTML=COLS.map(c=>'<th data-k="'+c[0]+'">'+c[1]+'</th>').join('');
 document.querySelectorAll('th').forEach(h=>h.onclick=()=>{const k=h.dataset.k;if(k===sort)asc=!asc;else{sort=k;asc=(k==='c');}draw();});
@@ -295,16 +311,21 @@ function draw(){
   const all=[...D].sort((a,b)=>{let x=a[sort],y=b[sort];
     if(t==='t')return asc?String(x).localeCompare(y):String(y).localeCompare(x);
     return asc?x-y:y-x;});
-  const fmt=(v,t)=>t==='m'?'$'+v.toLocaleString():t==='p'?v.toFixed(1)+'%':t==='d'?v.toFixed(2):t==='n'?v.toLocaleString():v;
+  const fmt=(v,t)=>{
+    if(t==='m') return '$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString());
+    if(t==='p') return v.toFixed(1)+'%';
+    if(t==='d') return v.toFixed(2);
+    if(t==='n') return v.toLocaleString();
+    if(t==='x') return '<span class="pill'+(v>=95?' bad':'')+'">'+v.toFixed(1)+'</span>';
+    return v;
+  };
   let html='';
   all.forEach(d=>{
     const h=hit(d)&&act.length>0;
     const cls=act.length===0?'':(h?'hit':'miss');
-    html+='<tr class="'+cls+'" data-c="'+d.c+'">'+COLS.map(c=>{
-      let v=fmt(d[c[0]],c[2]);
-      if(c[0]==='natl'&&d.natl>=95) v='<span class="pill">'+d.natl.toFixed(1)+'</span>';
-      return '<td class="'+(c[2]!=='t'?'num':'')+'">'+v+'</td>';
-    }).join('')+'</tr>';
+    html+='<tr class="'+cls+'" data-c="'+d.c+'">'+COLS.map(c=>
+      '<td class="'+(c[2]!=='t'?'num':'')+'">'+fmt(d[c[0]],c[2])+'</td>'
+    ).join('')+'</tr>';
     if(open===d.c) html+='<tr class="ev"><td colspan="'+COLS.length+'"><div class="ev-box">'+
       '<span class="h">Evidence paragraph &middot; '+d.c+' County</span>'+evidence(d)+
       '<small>Source: Rebuild by Design, Atlas of Disaster; FEMA National Risk Index (December 2025); FEMA OpenFEMA, 2011&ndash;2024; CDC Social Vulnerability Index 2022; U.S. Energy Information Administration.</small>'+
