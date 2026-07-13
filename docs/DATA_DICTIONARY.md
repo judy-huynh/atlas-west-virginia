@@ -24,6 +24,7 @@ All source files are in `atlas-of-accountability-v4 wv/data`.
 
 ## Validation
 
+- **Disaster counts and FEMA PA+HM reconcile exactly to the FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab, on all 55 counties.** So do 2024 population and FEMA per capita. WV totals: **268 declarations, $225,705,731 FEMA PA+HM**.
 - All **2,826 buyout points** fell inside a WV county. Zero unmatched.
 - All **55 repetitive-loss areas** placed. They fall in only **11 of 55 counties**.
 - `FLOOD_EAL_TOTAL` and `FLOOD_RISK_SCORE` reproduce `wv_nri_flood.geojson` (`feal`, `frisk`) exactly on all 55 counties, confirming that file is a derived extract of the NRI county file.
@@ -120,3 +121,16 @@ This master covers **hazard, flood, and exposure**. It does not contain:
 Any analysis of how flood risk intersects those subjects requires data that is not in this repository.
 
 **On the basin columns.** They record *which* basin a county sits in. They do not carry any federal watershed-program funding figures, so they can show the split and not the dollars.
+
+
+---
+
+## Correction, 2026-07-13
+
+`COUNTY_TOTAL_FEMA` in `Atlas_FEMA_WV.geojson` was **$1 too high on 26 of the 55 WV counties**, a rounding artifact introduced when the national Atlas geojson was generated from `aoa-data-2024.csv` (cents were truncated in the CSV and rounded up in the geojson). WV total was overstated by $26.
+
+Those 26 values were corrected against the **FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab**, which is the authoritative source and which agrees with `aoa-data-2024.csv` on all 55 counties. `wv_county_master.csv` was rebuilt from the corrected geojson.
+
+State-level fields (`STATE_FEMA_TOTAL`, `STATE_CDBG_TOTAL`, `STATE_TOTAL_FEDERAL_FUNDS`, `STATE_DISASTER_COUNT`, `STATE_POPULATION`, `STATE_PER_CAPITA`) were checked against the `State Level 2024` tab and were already correct.
+
+**The same rounding error affects the national geojson**, where 1,360 of 3,143 counties are +$1 (a total of $1,360 on $48.04B). That is tracked separately and is not fixed here.
