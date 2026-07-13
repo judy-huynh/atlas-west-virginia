@@ -129,13 +129,18 @@ fetch('data/wv_county_profile.csv')
   });
 
 function init(){
+  // Disaster declarations are NOT summed across counties. A single event
+  // (a hurricane, a derecho) is declared across many counties at once, so
+  // adding the county columns double-counts the event. The county figure is
+  // "how many declarations touched this county", and it is not additive.
+  // Everything below is genuinely additive: dollars, properties, areas.
   document.getElementById('stats').innerHTML=[
     [D.length,'Counties'],
-    [D.reduce((s,d)=>s+d.dis,0).toLocaleString(),'Disaster declarations'],
     ['$'+(D.reduce((s,d)=>s+d.fema,0)/1e6).toFixed(1)+'M','FEMA PA + HM'],
     ['$'+(D.reduce((s,d)=>s+d.eal,0)/1e6).toFixed(0)+'M','Flood loss per year'],
     [D.reduce((s,d)=>s+d.buy,0).toLocaleString(),'Buyout properties'],
-    [D.reduce((s,d)=>s+d.rl,0),'Repetitive loss areas']
+    [D.reduce((s,d)=>s+d.rl,0),'Repetitive loss areas'],
+    [D.filter(d=>d.natl>=90).length+' of '+D.length,'Counties above the 90th national flood percentile']
   ].map(x=>'<div class="st"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
 
   document.getElementById('th').innerHTML=COLS.map(c=>

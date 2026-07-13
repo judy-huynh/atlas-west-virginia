@@ -24,7 +24,8 @@ All source files are in `atlas-of-accountability-v4 wv/data`.
 
 ## Validation
 
-- **Disaster counts and FEMA PA+HM reconcile exactly to the FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab, on all 55 counties.** So do 2024 population and FEMA per capita. WV totals: **268 declarations, $225,705,731 FEMA PA+HM**.
+- **Disaster counts and FEMA PA+HM reconcile exactly to the FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab, on all 55 counties.** So do 2024 population and FEMA per capita. County-allocated FEMA PA+HM totals **$225,705,731**.
+- **Do not sum `DISASTER_COUNT_2011_2024` across counties.** One event is declared across many counties at once, so adding the column double-counts the event. The county-column sum is 268, which is a row-by-row checksum against the workbook and **not a count of declarations**. West Virginia has had **23** federal major disaster declarations, 2011 to 2024 (`STATE_DISASTER_COUNT` in `Atlas_FEMA_WV.geojson`). The highest any single county reached is **12** (Lincoln).
 - All **2,826 buyout points** fell inside a WV county. Zero unmatched.
 - All **55 repetitive-loss areas** placed. They fall in only **11 of 55 counties**.
 - `FLOOD_EAL_TOTAL` and `FLOOD_RISK_SCORE` reproduce `wv_nri_flood.geojson` (`feal`, `frisk`) exactly on all 55 counties, confirming that file is a derived extract of the NRI county file.
