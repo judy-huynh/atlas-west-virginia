@@ -1,9 +1,9 @@
 <title>Compound Risk Explorer &middot; Atlas of Disaster West Virginia</title>
 <style>
-:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--on:#C0392B;}
-@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--on:#f0796a;}}
-:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--on:#f0796a;}
-:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--on:#C0392B;}
+:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--on:#C0392B;--hit:#fdf0ee;--hitline:#f0cfc9;--dim:#9a9a9a;}
+@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--on:#f0796a;--hit:#2a1c1a;--hitline:#5a332c;--dim:#666;}}
+:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--on:#f0796a;--hit:#2a1c1a;--hitline:#5a332c;--dim:#666;}
+:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--on:#C0392B;--hit:#fdf0ee;--hitline:#f0cfc9;--dim:#9a9a9a;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 Arial,Helvetica,sans-serif;font-variant-numeric:tabular-nums}
 .wrap{max-width:84rem;margin:0 auto;padding:2rem 1.25rem 5rem}
@@ -53,15 +53,42 @@ h2.mt{margin-top:1.8rem}
 table{width:100%;border-collapse:collapse;font-size:.82rem}
 th{position:sticky;top:0;background:var(--bg);text-align:left;padding:.5rem .6rem;border-bottom:2px solid var(--head);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;cursor:pointer;user-select:none}
 th:hover{color:var(--on)}
-td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);white-space:nowrap}
-tr:nth-child(even) td{background:var(--tint)}
+td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);white-space:nowrap;transition:background .12s,color .12s}
+tbody tr:nth-child(even) td{background:var(--tint)}
 td.num{text-align:right}
 tbody tr{cursor:pointer}
-tr.hit td{box-shadow:inset 3px 0 0 var(--on)}
-tr.hit td:first-child{font-weight:700}
-tr.miss{opacity:.3}
+tbody tr:hover td{background:var(--card)}
+
+/* ---- MATCHED ----------------------------------------------------------
+   The row is the unit of emphasis, not the cell. A single accent rail on
+   the first cell, a warm tint across the whole row, and the county name in
+   bold. The old rule put an inset shadow on EVERY cell, which drew a red
+   tick at each column boundary and read as a barcode. */
+tbody tr.hit td,
+tbody tr.hit:nth-child(even) td{
+  background:var(--hit);
+  border-bottom-color:var(--hitline);
+  color:var(--ink);
+}
+tbody tr.hit td:first-child{
+  box-shadow:inset 4px 0 0 var(--on);
+  font-weight:700;
+  padding-left:.85rem;
+}
+tbody tr.hit:hover td{background:var(--hit);filter:brightness(.98)}
+
+/* ---- NOT MATCHED ------------------------------------------------------
+   Recede, but stay readable. Blanket opacity washed out the whole row
+   including the numbers, which people still want to read. */
+tbody tr.miss td,
+tbody tr.miss:nth-child(even) td{background:var(--bg);color:var(--dim)}
+tbody tr.miss .pill{border-color:var(--dim);color:var(--dim)}
+tbody tr.miss:hover td{background:var(--tint);color:var(--grey)}
+
 .pill{display:inline-block;padding:.05rem .35rem;font-size:.68rem;font-weight:700;border:1px solid var(--on);color:var(--on)}
-tr.ev td{background:var(--tint);white-space:normal;cursor:default;box-shadow:inset 3px 0 0 var(--on)}
+tbody tr.hit .pill{background:var(--on);color:#fff;border-color:var(--on)}
+tr.ev td{background:var(--hit);white-space:normal;cursor:default;border-bottom-color:var(--hitline)}
+tr.ev td:first-child{box-shadow:inset 4px 0 0 var(--on)}
 .ev-box .h{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--on);font-weight:700}
 .ev-box p{margin:.4rem 0 .5rem;font-size:.87rem;line-height:1.65;max-width:52rem}
 .ev-box small{color:var(--grey);font-size:.72rem}
