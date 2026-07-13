@@ -10,7 +10,11 @@ This is a **data repository**. It is not the WV map site (that is [`Westvirginia
 
 **`data/wv_county_master.csv`** is the point of the repo: one row per WV county, 55 columns, joining every layer below on 5-digit FIPS.
 
-Open **`index.html`** in a browser for a sortable, filterable view of all 55 counties.
+Three pages, published at **<https://judy-huynh.github.io/atlas-west-virginia/>**:
+
+- **[County table](https://judy-huynh.github.io/atlas-west-virginia/)** — all 55 counties, sortable.
+- **[Compound risk explorer](https://judy-huynh.github.io/atlas-west-virginia/explore.html)** — filter counties by the risks that matter to your work, with a sourced evidence paragraph for each county.
+- **[About the data](https://judy-huynh.github.io/atlas-west-virginia/methodology.html)** — what every column means and where it comes from.
 
 | File | What it is |
 |---|---|
@@ -25,6 +29,7 @@ Open **`index.html`** in a browser for a sortable, filterable view of all 55 cou
 | `data/wv_nri_flood.geojson` | Flood extract derived from the NRI county file. |
 | `docs/DATA_DICTIONARY.md` | **Read this before using the data.** Every column, source, and limitation. |
 | `docs/METHODOLOGY.md` | How every column was produced: what came from source, what was calculated, and how. |
+| `explore.html` | The compound risk explorer. Reads `data/wv_county_master.csv` at runtime, so it never drifts from the data. |
 | `tools/build_wv_master.py` | Regenerates the master file from the layers in `data/`. |
 
 ## Rebuilding the master file
