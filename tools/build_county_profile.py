@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-West Virginia county master file.
+West Virginia County Risk Profile.
 
 One row per WV county (55), keyed on 5-digit FIPS. Joins:
   - Atlas of Accountability core   <- Master/atlas_county_master.csv (WV subset)
@@ -18,7 +18,7 @@ from shapely.ops import transform, unary_union
 from shapely.strtree import STRtree
 from pyproj import Transformer
 
-# Repo-relative. Run from anywhere: python3 tools/build_wv_master.py
+# Repo-relative. Run from anywhere: python3 tools/build_county_profile.py
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 WV = os.path.join(ROOT, "data")
@@ -275,7 +275,7 @@ for fips, c in sorted(counties.items()):
         "ALL_WATERSHEDS": "; ".join(w["name"] for _, w in ovl),
     })
 
-path = os.path.join(OUT, "wv_county_master.csv")
+path = os.path.join(OUT, "wv_county_profile.csv")
 with open(path, "w", newline="", encoding="utf-8") as fh:
     w = csv.DictWriter(fh, fieldnames=COLS)
     w.writeheader()

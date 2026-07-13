@@ -8,7 +8,7 @@ This is a **data repository**. It is not the WV map site (that is [`Westvirginia
 
 ## What is here
 
-**`data/wv_county_master.csv`** is the point of the repo: one row per WV county, 55 columns, joining every layer below on 5-digit FIPS.
+**`data/wv_county_profile.csv`** is the point of the repo: one row per WV county, 55 columns, joining every layer below on 5-digit FIPS.
 
 Three pages, published at **<https://judy-huynh.github.io/atlas-west-virginia/>**:
 
@@ -18,7 +18,7 @@ Three pages, published at **<https://judy-huynh.github.io/atlas-west-virginia/>*
 
 | File | What it is |
 |---|---|
-| `data/wv_county_master.csv` | **The master file.** 55 counties, 55 columns. |
+| `data/wv_county_profile.csv` | **The master file.** 55 counties, 55 columns. |
 | `data/Atlas_FEMA_WV.geojson` | Atlas of Accountability core, WV subset (55 counties, 41 properties): disaster declarations 2011 to 2024, FEMA PA+HM, CDC SVI, SAIDI, older adults, race, heat NRI. |
 | `data/US_Congress_WV.geojson` | WV congressional districts (2). |
 | `data/NRI_Counties_WV.geojson` | FEMA National Risk Index, county level. 467 fields. |
@@ -29,14 +29,14 @@ Three pages, published at **<https://judy-huynh.github.io/atlas-west-virginia/>*
 | `data/wv_nri_flood.geojson` | Flood extract derived from the NRI county file. |
 | `docs/DATA_DICTIONARY.md` | **Read this before using the data.** Every column, source, and limitation. |
 | `docs/METHODOLOGY.md` | How every column was produced: what came from source, what was calculated, and how. |
-| `explore.html` | The compound risk explorer. Reads `data/wv_county_master.csv` at runtime, so it never drifts from the data. |
-| `tools/build_wv_master.py` | Regenerates the master file from the layers in `data/`. |
+| `explore.html` | The compound risk explorer. Reads `data/wv_county_profile.csv` at runtime, so it never drifts from the data. |
+| `tools/build_county_profile.py` | Regenerates the master file from the layers in `data/`. |
 
 ## Rebuilding the master file
 
 ```bash
 pip install shapely pyproj
-python3 tools/build_wv_master.py
+python3 tools/build_county_profile.py
 ```
 
 Area math runs in EPSG:5070 (CONUS Albers equal-area). Source GeoJSONs are EPSG:4326.

@@ -1,4 +1,4 @@
-<title>WV County Master &middot; Atlas of Disaster West Virginia</title>
+<title>West Virginia County Risk Profile &middot; Atlas of Disaster</title>
 <style>
 :root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--ohio:#2171b5;--ches:#238b45;}
 @media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--ohio:#6baed6;--ches:#66c2a4;}}
@@ -34,8 +34,8 @@ footer b{color:var(--ink)}
 </style>
 <div class="wrap">
 <div class="brand" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem"><span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span><span><a href="explore.html" style="color:var(--crimson);text-decoration:none;letter-spacing:.05em">Compound risk explorer</a> &nbsp;&middot;&nbsp; <a href="methodology.html" style="color:var(--crimson);text-decoration:none;letter-spacing:.05em">About the data</a></span></div>
-<h1>WV County Master</h1>
-<p class="sub">All 55 counties. Flood, hazard, buyout, and Atlas data in one table. Click any column to sort. Use the <a href="explore.html" style="color:var(--crimson)">compound risk explorer</a> to find the counties that carry several risks at once. <a href="methodology.html" style="color:var(--crimson)">About the data</a> explains what each column means and where it comes from.</p>
+<h1>West Virginia County Risk Profile</h1>
+<p class="sub">Every county, every risk, in one place. All 55 counties, with disaster, flood, buyout, and vulnerability data. Click any column to sort. Use the <a href="explore.html" style="color:var(--crimson)">compound risk explorer</a> to find the counties that carry several risks at once. <a href="methodology.html" style="color:var(--crimson)">About the data</a> explains what each column means and where it comes from.</p>
 <div class="stats" id="stats"></div>
 <div class="ctl">
   <input id="q" type="search" placeholder="Filter counties..." style="flex:1;min-width:12rem">
@@ -44,7 +44,7 @@ footer b{color:var(--ink)}
 </div>
 <div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
 <footer>
-<b>Source.</b> <b>wv_county_master.csv</b>, built from NRI_Counties_WV.geojson, wv_buyouts.geojson (2,826 points, spatially joined),
+<b>Source.</b> <b>wv_county_profile.csv</b>, built from NRI_Counties_WV.geojson, wv_buyouts.geojson (2,826 points, spatially joined),
 wv_repetitive_loss.geojson, wv_watersheds.geojson, wv_floodplain.geojson, and the Atlas of Accountability county master.
 Area math in EPSG:5070 equal-area. Disaster counts and FEMA totals reconcile exactly to the FINAL Atlas of Accountability 2011-2024 Workbook, County Level 2024 tab.<br>
 <b>Read the limitations.</b> Buyout years are missing for 45% of properties. Data centers, coal plants, mining, and corporate

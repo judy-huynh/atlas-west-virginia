@@ -1,7 +1,7 @@
-# WV County Master: Data Dictionary
+# West Virginia County Risk Profile: Data Dictionary
 
-`wv_county_master.csv`. One row per West Virginia county (55), keyed on 5-digit FIPS (`GEOID`).
-Built 2026-07-13 by `build_wv_master.py`. Rebuild with `python3 build_wv_master.py`.
+`wv_county_profile.csv`. One row per West Virginia county (55), keyed on 5-digit FIPS (`GEOID`).
+Built 2026-07-13 by `build_county_profile.py`. Rebuild with `python3 build_county_profile.py`.
 
 Area math is done in **EPSG:5070** (CONUS Albers equal-area). Source GeoJSONs are EPSG:4326.
 
@@ -129,7 +129,7 @@ Any analysis of how flood risk intersects those subjects requires data that is n
 
 `COUNTY_TOTAL_FEMA` in `Atlas_FEMA_WV.geojson` was **$1 too high on 26 of the 55 WV counties**, a rounding artifact introduced when the national Atlas geojson was generated from `aoa-data-2024.csv` (cents were truncated in the CSV and rounded up in the geojson). WV total was overstated by $26.
 
-Those 26 values were corrected against the **FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab**, which is the authoritative source and which agrees with `aoa-data-2024.csv` on all 55 counties. `wv_county_master.csv` was rebuilt from the corrected geojson.
+Those 26 values were corrected against the **FINAL Atlas of Accountability 2011-2024 Workbook, `County Level 2024` tab**, which is the authoritative source and which agrees with `aoa-data-2024.csv` on all 55 counties. `wv_county_profile.csv` was rebuilt from the corrected geojson.
 
 State-level fields (`STATE_FEMA_TOTAL`, `STATE_CDBG_TOTAL`, `STATE_TOTAL_FEDERAL_FUNDS`, `STATE_DISASTER_COUNT`, `STATE_POPULATION`, `STATE_PER_CAPITA`) were checked against the `State Level 2024` tab and were already correct.
 

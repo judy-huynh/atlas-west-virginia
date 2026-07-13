@@ -115,7 +115,7 @@ function parseCSV(t){
 const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
 let D=[];
 
-fetch('data/wv_county_master.csv')
+fetch('data/wv_county_profile.csv')
   .then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); })
   .then(t=>{
     D = parseCSV(t).map(r=>({
@@ -132,7 +132,7 @@ fetch('data/wv_county_master.csv')
   })
   .catch(e=>{
     document.getElementById('said').innerHTML =
-      '<b style="color:var(--on)">Could not load data/wv_county_master.csv ('+e.message+').</b> ' +
+      '<b style="color:var(--on)">Could not load data/wv_county_profile.csv ('+e.message+').</b> ' +
       'This page must be served over http, not opened as a file. Use the live site, or run ' +
       '<code>python3 -m http.server</code> from the repository root.';
   });

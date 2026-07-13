@@ -127,7 +127,7 @@ Disaster counts and FEMA totals were **fact-checked against the FINAL Atlas of A
 
 ```bash
 pip install shapely pyproj
-python3 tools/build_wv_master.py
+python3 tools/build_county_profile.py
 ```
 
 Every calculated column is produced by that one script. Nothing was done by hand, in Excel, or in QGIS, so there are no manual steps to trust.
