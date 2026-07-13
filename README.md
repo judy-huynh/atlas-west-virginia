@@ -24,6 +24,7 @@ Open **`index.html`** in a browser for a sortable, filterable view of all 55 cou
 | `data/wv_watersheds.geojson` | 33 HUC-8 watersheds. |
 | `data/wv_nri_flood.geojson` | Flood extract derived from the NRI county file. |
 | `docs/DATA_DICTIONARY.md` | **Read this before using the data.** Every column, source, and limitation. |
+| `docs/METHODOLOGY.md` | How every column was produced: what came from source, what was calculated, and how. |
 | `tools/build_wv_master.py` | Regenerates the master file from the layers in `data/`. |
 
 ## Rebuilding the master file
