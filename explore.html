@@ -239,10 +239,10 @@ ROLES.forEach((r,i)=>{
   const row=document.createElement('div'); row.className='rolerow';
   const b=document.createElement('button'); b.className='role'; b.dataset.i=i; b.title=r.d;
   b.innerHTML='<span class="n">'+r.n+'</span><span class="k">'+hits+'</span>';
-  b.onclick=()=>{sel=new Set(r.on); open=null; draw();};
+  b.onclick=()=>{sel=new Set(r.on); open=null; rtip=null; buildRoles(); draw();};
   const q=document.createElement('button'); q.className='qm'; q.textContent='?';
   q.title='Who is this for?';
-  q.onclick=e=>{e.stopPropagation(); rtip=(rtip===i?null:i); draw();};
+  q.onclick=e=>{e.stopPropagation(); rtip=(rtip===i?null:i); buildRoles(); draw();};
   row.appendChild(b); row.appendChild(q);
   R.appendChild(row);
   if(rtip===i){
