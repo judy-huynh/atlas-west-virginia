@@ -22,31 +22,13 @@ That is the gap this repository exists to close.
 
 ---
 
-## Where West Virginia actually stands
+## Where West Virginia stands
 
-Every figure below comes from `data/wv_county_profile.csv` and can be checked.
+The findings live on the site, not in this file, so they are computed from the data and cannot go stale.
 
-**The flooding is nationally extreme.**
-- The **median** West Virginia county sits in the **96th percentile nationally** for flood loss.
-- **45 of 55 counties** are above the 90th percentile. **10 are above the 99th.**
-- Together the state loses an estimated **$859 million every year** to flooding.
+**→ [Read the findings](https://judy-huynh.github.io/atlas-west-virginia/findings.html)**
 
-**The money has not followed the risk.**
-- Half of West Virginia's counties have received **$28 or less per resident** in federal recovery and mitigation funding across fourteen years.
-- **16 counties are in the worst 5% in the country for flood loss while receiving below even that state median.** They lose **$174.5 million a year** to flooding. Since 2011 they have received **$3.1 million** in FEMA funding, combined.
-- Putnam County loses $29.9 million a year and has received **$5 per resident**. Wirt County is in the 99.9th percentile nationally and has received **$4**.
-
-**The retreat has already begun, quietly.**
-- **2,826 properties** in West Virginia have been bought out and cleared because they kept flooding.
-- **708 of them are in McDowell County alone**, the poorest county in the state, and more than double any other county.
-- FEMA has formally designated **55 repetitive loss areas**, concentrated in just **11 of 55 counties**.
-
-**The risks compound.**
-- **Mason County** has the worst power reliability in the state (854 minutes without power a year, over 14 hours) **and** the largest share of any county inside the flood zone (9.85%).
-- A flood without power is not the same disaster. No pumps, no heat, no medical equipment, no way to call for help.
-
-**And the state is split in a way that determines federal funding.**
-- **47 counties drain to the Ohio River. 8 drain to the Chesapeake Bay.** Federal watershed programs follow basins, and the two basins are not funded alike.
+In short: the median West Virginia county sits in the 96th percentile nationally for flood loss, the state loses hundreds of millions of dollars a year to flooding, and the counties hit hardest have received the least federal money. FEMA's own rating hides all of it.
 
 ---
 
@@ -79,6 +61,7 @@ Being clear about the limits is part of the point.
 
 | Page | What it does |
 |---|---|
+| **[Findings](https://judy-huynh.github.io/atlas-west-virginia/findings.html)** | Where West Virginia actually stands. Every figure computed live from the data. |
 | **[County Risk Profile](https://judy-huynh.github.io/atlas-west-virginia/)** | All 55 counties, every column, sortable. |
 | **[Compound Risk Explorer](https://judy-huynh.github.io/atlas-west-virginia/explore.html)** | Filter by the risks that matter to your work. Click a county for a sourced evidence paragraph. |
 | **[About the data](https://judy-huynh.github.io/atlas-west-virginia/methodology.html)** | What every column means and where it comes from. |

@@ -1,0 +1,212 @@
+<title>Findings &middot; Atlas of Disaster West Virginia</title>
+<style>
+:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;}
+@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;}}
+:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;}
+:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 Arial,Helvetica,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 6rem}
+.brand{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--head);font-weight:700;border-bottom:3px solid var(--head);padding-bottom:.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.brand a{color:var(--crimson);text-decoration:none;letter-spacing:.05em}
+.brand a:hover{text-decoration:underline}
+h1{font-size:2.6rem;line-height:1.1;margin:1.4rem 0 .5rem;color:var(--head);letter-spacing:-.02em;text-wrap:balance}
+.deck{font-size:1.2rem;line-height:1.55;color:var(--grey);margin:0 0 2.2rem;max-width:44rem}
+h2{font-size:1.5rem;line-height:1.25;margin:3rem 0 .3rem;color:var(--head);letter-spacing:-.01em;text-wrap:balance}
+.kicker{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--crimson);font-weight:700;margin:0}
+p{margin:0 0 1.1rem;max-width:44rem}
+a{color:var(--crimson)}
+strong{color:var(--head)}
+.big{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.5rem 0 1.8rem}
+.big div{background:var(--card);padding:1rem 1.2rem;flex:1;min-width:9rem}
+.big b{display:block;font-size:2rem;line-height:1.05;color:var(--crimson);letter-spacing:-.02em}
+.big span{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--grey);margin-top:.35rem;line-height:1.4}
+.pull{border-left:3px solid var(--crimson);padding:.2rem 0 .2rem 1.1rem;margin:1.6rem 0;font-size:1.15rem;line-height:1.5;color:var(--head);max-width:44rem}
+.tw{overflow-x:auto;border:1px solid var(--rule);margin:1.4rem 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{background:var(--bg);text-align:left;padding:.55rem .7rem;border-bottom:2px solid var(--head);font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+td{padding:.55rem .7rem;border-bottom:1px solid var(--rule);white-space:nowrap}
+tr:nth-child(even) td{background:var(--tint)}
+td.num{text-align:right}
+.bad{display:inline-block;padding:.05rem .4rem;font-size:.75rem;font-weight:700;background:var(--crimson);color:#fff}
+.note{background:var(--tint);border-left:3px solid var(--grey);padding:.9rem 1.1rem;font-size:.88rem;color:var(--grey);margin:1.6rem 0;line-height:1.6}
+.note b{color:var(--ink)}
+.cta{display:flex;gap:.6rem;flex-wrap:wrap;margin:2.4rem 0 0}
+.cta a{display:inline-block;padding:.6rem 1rem;border:1px solid var(--crimson);color:var(--crimson);text-decoration:none;font-size:.88rem;font-weight:700}
+.cta a:hover{background:var(--crimson);color:#fff}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:.8rem;color:var(--grey);line-height:1.7}
+footer b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+<div class="brand">
+  <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
+  <span><a href="./">County table</a> &nbsp;&middot;&nbsp; <a href="explore.html">Explorer</a> &nbsp;&middot;&nbsp; <a href="methodology.html">About the data</a></span>
+</div>
+
+<h1>Where West Virginia actually stands</h1>
+<p class="deck">West Virginia floods worse than almost anywhere in the country. The tools meant to measure that risk are the reason nobody knows it.</p>
+
+<div class="big" id="big"></div>
+
+<p class="kicker">The problem</p>
+<h2>FEMA's own rating makes West Virginia look safer than it is</h2>
+
+<p>FEMA scores every county's flood risk <strong>relative to the whole United States</strong>. In a state where flooding is everywhere, that comparison flattens. Counties that would be alarming anywhere else get graded against a national field and come out looking ordinary.</p>
+
+<p id="lowbut"></p>
+
+<div class="pull" id="pull1"></div>
+
+<p>A label like that does real damage. It is what a grant reviewer sees. It is what a national dataset carries forward. It is how a county with catastrophic flood losses gets sorted into the pile marked <em>not urgent</em>.</p>
+
+<div class="tw"><table>
+<thead><tr><th>County</th><th>FEMA's rating</th><th class="num">Where it actually ranks nationally</th><th class="num">Flood loss per year</th></tr></thead>
+<tbody id="lowtable"></tbody>
+</table></div>
+
+<div class="note">
+<b>The fix is one column.</b> Every page in this project shows the <b>national percentile</b> beside FEMA's rating. When the two disagree, trust the percentile. It is the number that says where a county actually sits against the rest of the country.
+</div>
+
+<p class="kicker">The scale</p>
+<h2>The flooding is nationally extreme</h2>
+<p id="extreme"></p>
+
+<p class="kicker">The gap</p>
+<h2>The money has not followed the risk</h2>
+<p id="gap1"></p>
+<div class="pull" id="pull2"></div>
+<p id="gap2"></p>
+
+<div class="tw"><table>
+<thead><tr><th>County</th><th class="num">National flood percentile</th><th class="num">Loses per year</th><th class="num">FEMA per resident</th></tr></thead>
+<tbody id="gaptable"></tbody>
+</table></div>
+
+<p class="kicker">The retreat</p>
+<h2>People are already leaving, quietly</h2>
+<p id="buyouts"></p>
+
+<p class="kicker">The compounding</p>
+<h2>A flood without power is a different disaster</h2>
+<p id="compound"></p>
+<p>No pumps. No heat. No medical equipment. No way to call for help. Flooding and outages do not add together, they multiply, and the counties that carry both are the ones where a bad day becomes an emergency the county cannot handle alone.</p>
+
+<p class="kicker">The divide</p>
+<h2>Two basins, funded differently</h2>
+<p id="basins"></p>
+
+<div class="cta">
+  <a href="./">See all 55 counties</a>
+  <a href="explore.html">Find the counties that carry several risks</a>
+  <a href="methodology.html">How this was measured</a>
+</div>
+
+<footer>
+<b>Every figure on this page is computed from <a href="data/wv_county_profile.csv">wv_county_profile.csv</a> when the page loads.</b> Nothing here is typed in by hand, so these findings cannot drift from the data.<br>
+Disaster counts and FEMA totals reconcile exactly to the Atlas of Accountability 2011&ndash;2024 workbook, on all 55 counties.
+Sources: FEMA National Risk Index (December 2025), FEMA OpenFEMA, FEMA National Flood Hazard Layer, FEMA/USACE/NRCS/HUD buyout records, USGS, CDC Social Vulnerability Index 2022, U.S. Census Bureau, U.S. Energy Information Administration.
+<b>See <a href="methodology.html">About the data</a> for limitations.</b>
+</footer>
+</div>
+
+<script>
+function parseCSV(t){
+  const rows=[]; let f='', row=[], q=false;
+  for(let i=0;i<t.length;i++){
+    const c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=''; }
+    else if(c==='\n'){ row.push(f); rows.push(row); row=[]; f=''; }
+    else if(c!=='\r') f+=c;
+  }
+  if(f.length||row.length){ row.push(f); rows.push(row); }
+  const h=rows.shift();
+  return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])));
+}
+const n=v=>{const x=parseFloat(v);return isNaN(x)?0:x;};
+const $=id=>document.getElementById(id);
+const money=v=> v>=1e9 ? '$'+(v/1e9).toFixed(1)+' billion'
+             : v>=1e6 ? '$'+(v/1e6).toFixed(1)+' million'
+             : '$'+Math.round(v).toLocaleString();
+
+fetch('data/wv_county_profile.csv').then(r=>r.text()).then(t=>{
+  const D=parseCSV(t).map(r=>({
+    c:r.COUNTY, basin:r.BASIN,
+    dis:n(r.DISASTER_COUNT_2011_2024), statedis:n(r.STATE_DISASTER_COUNT),
+    fema:n(r.FEMA_PA_HM), pc:n(r.FEMA_PER_CAPITA),
+    rate:r.FLOOD_RISK_RATING, natl:n(r.FLOOD_EAL_NATL_PCTILE), eal:n(r.FLOOD_EAL_TOTAL),
+    fp:n(r.PCT_COUNTY_IN_SFHA), rl:n(r.REPETITIVE_LOSS_AREAS), buy:n(r.BUYOUTS_TOTAL),
+    saidi:n(r.SAIDI_MIN_AVG), pop:n(r.COUNTY_POPULATION||r.POPULATION)
+  }));
+  const N=D.length;
+  const sorted=k=>[...D].sort((a,b)=>a[k]-b[k]);
+  const median=k=>sorted(k)[Math.floor(N/2)][k];
+  const sum=k=>D.reduce((s,d)=>s+d[k],0);
+
+  // headline numbers
+  $('big').innerHTML=[
+    [median('natl').toFixed(0)+'th','Percentile nationally for flood loss, median county'],
+    [D.filter(d=>d.natl>=90).length+' of '+N,'Counties in the nation’s worst 10%'],
+    [money(sum('eal')),'Lost to flooding every year'],
+    ['$'+median('pc'),'Median FEMA dollars per resident, since 2011']
+  ].map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+
+  // the mislabelled counties
+  const low=D.filter(d=>d.rate==='Relatively Low' && d.natl>=99).sort((a,b)=>b.natl-a.natl);
+  $('lowbut').innerHTML='The result is that FEMA labels <strong>'+low.length+' West Virginia counties &ldquo;Relatively Low&rdquo; flood risk</strong> '+
+    'that are, in fact, in the <strong>worst 1% of counties in the United States</strong> for flood losses.';
+  $('pull1').innerHTML='<strong>'+low[0].c+' County</strong> is rated &ldquo;Relatively Low&rdquo; by FEMA. It ranks in the '+
+    '<strong>'+low[0].natl.toFixed(1)+'th percentile nationally</strong> for flood loss. Only '+(100-low[0].natl).toFixed(1)+'% of American counties lose more.';
+  $('lowtable').innerHTML=low.map(d=>'<tr><td><b>'+d.c+'</b></td><td>'+d.rate+'</td>'+
+    '<td class="num"><span class="bad">'+d.natl.toFixed(1)+'</span></td><td class="num">'+money(d.eal)+'</td></tr>').join('');
+
+  // scale
+  $('extreme').innerHTML='The <strong>median</strong> West Virginia county sits in the <strong>'+median('natl').toFixed(0)+'th percentile nationally</strong> for flood loss. '+
+    '<strong>'+D.filter(d=>d.natl>=90).length+' of '+N+' counties</strong> are above the 90th percentile, and <strong>'+D.filter(d=>d.natl>=99).length+'</strong> are above the 99th. '+
+    'Taken together, West Virginia loses an estimated <strong>'+money(sum('eal'))+' every year</strong> to flooding. '+
+    'This is not a handful of unlucky river towns. It is most of the state.';
+
+  // the funding gap
+  const m=median('pc');
+  const gap=D.filter(d=>d.natl>=95 && d.pc<=m).sort((a,b)=>b.eal-a.eal);
+  $('gap1').innerHTML='Federal recovery money follows declared damage, not need. Half of West Virginia&rsquo;s counties have received '+
+    '<strong>$'+m+' or less per resident</strong> across fourteen years.';
+  $('pull2').innerHTML='<strong>'+gap.length+' counties</strong> are in the worst 5% in the country for flood loss <em>and</em> receive below even that state median. '+
+    'They lose <strong>'+money(gap.reduce((s,d)=>s+d.eal,0))+' a year</strong> to flooding. Since 2011 they have received '+
+    '<strong>'+money(gap.reduce((s,d)=>s+d.fema,0))+'</strong> in FEMA funding, combined.';
+  const worst=[...gap].sort((a,b)=>a.pc-b.pc)[0];
+  $('gap2').innerHTML='<strong>'+gap[0].c+' County</strong> loses '+money(gap[0].eal)+' a year and has received <strong>$'+gap[0].pc+' per resident</strong>. '+
+    '<strong>'+worst.c+' County</strong> sits in the '+worst.natl.toFixed(1)+'th percentile nationally and has received <strong>$'+worst.pc+'</strong>.';
+  $('gaptable').innerHTML=gap.map(d=>'<tr><td><b>'+d.c+'</b></td><td class="num"><span class="bad">'+d.natl.toFixed(1)+'</span></td>'+
+    '<td class="num">'+money(d.eal)+'</td><td class="num">$'+d.pc+'</td></tr>').join('');
+
+  // buyouts
+  const mb=[...D].sort((a,b)=>b.buy-a.buy)[0];
+  const rlc=D.filter(d=>d.rl>0).length;
+  $('buyouts').innerHTML='<strong>'+sum('buy').toLocaleString()+' properties</strong> in West Virginia have already been bought out and cleared because they kept flooding. '+
+    '<strong>'+mb.buy.toLocaleString()+' of them are in '+mb.c+' County alone</strong>, more than double any other county in the state. '+
+    'FEMA has formally designated <strong>'+sum('rl')+' repetitive loss areas</strong>, and they are concentrated in just <strong>'+rlc+' of '+N+' counties</strong>. '+
+    'Managed retreat is not a future policy question in West Virginia. It has been happening for years, without anyone calling it that.';
+
+  // compounding
+  const ms=[...D].sort((a,b)=>b.saidi-a.saidi)[0];
+  const mf=[...D].sort((a,b)=>b.fp-a.fp)[0];
+  const same=ms.c===mf.c;
+  $('compound').innerHTML='<strong>'+ms.c+' County</strong> has the worst power reliability in the state: the average customer spends '+
+    '<strong>'+Math.round(ms.saidi).toLocaleString()+' minutes</strong> without electricity every year, more than '+Math.floor(ms.saidi/60)+' hours. '+
+    (same ? 'It also has <strong>the largest share of any county inside the high-risk flood zone ('+mf.fp.toFixed(1)+'%)</strong>. The same county. ' : '') +
+    'That is what compound risk means in practice.';
+
+  // basins
+  const ohio=D.filter(d=>d.basin==='Ohio River').length, ches=D.filter(d=>d.basin==='Chesapeake Bay').length;
+  $('basins').innerHTML='<strong>'+ohio+' counties drain to the Ohio River. '+ches+' drain to the Chesapeake Bay.</strong> '+
+    'Federal watershed programs are organised by basin, and the two basins are not funded alike. '+
+    'Which side of a ridgeline a county sits on shapes what money it can even apply for, and that has nothing to do with how badly it floods.';
+}).catch(e=>{
+  document.querySelector('.wrap').insertAdjacentHTML('beforeend',
+    '<div class="note"><b>Could not load data/wv_county_profile.csv ('+e.message+').</b> This page must be served over http, not opened as a file.</div>');
+});
+</script>
