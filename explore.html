@@ -16,12 +16,17 @@ h2.mt{margin-top:1.8rem}
 .grid{display:grid;grid-template-columns:20rem 1fr;gap:2rem;align-items:start}
 @media(max-width:960px){.grid{grid-template-columns:1fr}}
 
-.roles{display:grid;gap:.5rem}
-.role{text-align:left;background:var(--card);border:1px solid var(--rule);padding:.7rem .8rem;cursor:pointer;font:inherit;color:var(--ink)}
-.role:hover{border-color:var(--on)}
-.role.on{border-color:var(--on);border-left:4px solid var(--on);background:var(--tint)}
-.role b{display:block;font-size:.9rem}
-.role span{display:block;font-size:.75rem;color:var(--grey);margin-top:.15rem;line-height:1.45}
+.exl{font-size:.75rem;color:var(--grey);margin:-.35rem 0 .55rem}
+.roles{display:grid;gap:0}
+.role{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;
+  text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);
+  padding:.5rem .1rem;cursor:pointer;font:inherit;font-size:.83rem;color:var(--grey)}
+.role:last-child{border-bottom:0}
+.role:hover{color:var(--on)}
+.role.on{color:var(--on);font-weight:700}
+.role .n{flex:1;min-width:0}
+.role .k{font-size:.72rem;color:var(--dim);white-space:nowrap}
+.role.on .k{color:var(--on)}
 
 .facs{display:grid;gap:.15rem}
 .fac{display:flex;align-items:flex-start;gap:.55rem;padding:.45rem .5rem;border:1px solid transparent}
@@ -105,11 +110,13 @@ tr.ev td:first-child{box-shadow:inset 4px 0 0 var(--on)}
 
 <div class="grid">
 <div>
-  <h2>Start with your work</h2>
-  <div class="roles" id="roles"></div>
-  <h2 class="mt">Adjust the factors</h2>
+  <h2>Adjust the factors</h2>
   <div class="facs" id="facs"></div>
   <button class="reset" id="reset">Clear all filters</button>
+
+  <h2 class="mt">Examples</h2>
+  <p class="exl">Common combinations. Click one to load it, then adjust.</p>
+  <div class="roles" id="roles"></div>
 </div>
 
 <div>
@@ -219,8 +226,11 @@ function buildRoles(){
 const R=document.getElementById('roles');
 R.innerHTML='';
 ROLES.forEach((r,i)=>{
+  const act=FACTORS.filter(f=>r.on.includes(f.k));
+  const hits=D.filter(d=>act.every(f=>f.f(d))).length;
   const b=document.createElement('button'); b.className='role'; b.dataset.i=i;
-  b.innerHTML='<b>'+r.n+'</b><span>'+r.d+'</span>';
+  b.title=r.d;
+  b.innerHTML='<span class="n">'+r.n+'</span><span class="k">'+hits+'</span>';
   b.onclick=()=>{sel=new Set(r.on); open=null; draw();};
   R.appendChild(b);
 });
@@ -298,7 +308,7 @@ function draw(){
   const why=document.getElementById('why');
   if(role){why.style.display='';why.innerHTML='<span class="h">Why these filters</span>'+role.why;}
   else if(act.length){why.style.display='';why.innerHTML='<span class="h">Your filters</span>Showing counties that are <b>'+act.map(f=>f.n.toLowerCase()).join('</b> and <b>')+'</b>. Filters stack: a county must meet every one to appear. Use the <b>?</b> beside each filter to see why it matters.';}
-  else {why.style.display='';why.innerHTML='<span class="h">Start here</span>Pick the kind of work you do on the left, or build your own combination. Every filter stacks, so a county has to meet all of them to be counted. Click the <b>?</b> beside any filter to see the reasoning behind it.';}
+  else {why.style.display='';why.innerHTML='<span class="h">Start here</span>Tick the factors that matter for your work. Every filter stacks, so a county has to meet all of them to be counted. Click the <b>?</b> beside any factor to see why it matters, or load one of the <b>examples</b> below the factors.';}
 
   document.getElementById('cnt').textContent=hits.length;
   const said=document.getElementById('said');
