@@ -120,6 +120,6 @@ FEMA National Risk Index · FEMA OpenFEMA (disaster declarations, Public Assista
 
 ## Related
 
-- [Atlas of Accountability](https://rebuildbydesign.github.io/atlas-of-accountability-v2/) — the national interactive map
+- [Atlas of Accountability](https://rebuildbydesign.github.io/atlas-of-accountability-v2/), the national interactive map
 - [Atlas of Disaster](https://rebuildbydesign.org/atlas-of-disaster/)
-- [`Westvirginia-atlas`](https://github.com/rebuildbydesign/Westvirginia-atlas) — the WV map site (this repo is the data)
+- [`Westvirginia-atlas`](https://github.com/rebuildbydesign/Westvirginia-atlas), the WV map site (this repo is the data)
