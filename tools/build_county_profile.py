@@ -139,6 +139,7 @@ atlas = {}
 for f in json.load(open(ATLAS_GEOJSON))["features"]:
     p = f["properties"]
     atlas[p["GEOID"]] = {
+        "STATE_DISASTER_COUNT": p.get("STATE_DISASTER_COUNT"),
         "COUNTY_DISASTER_COUNT": p.get("COUNTY_DISASTER_COUNT"),
         "COUNTY_TOTAL_FEMA": p.get("COUNTY_TOTAL_FEMA"),
         "COUNTY_PER_CAPITA": p.get("COUNTY_PER_CAPITA"),
@@ -159,7 +160,7 @@ print(f"atlas core rows for WV: {len(atlas)}")
 COLS = [
     "GEOID", "COUNTY", "STATE",
     # Atlas of Accountability core
-    "DISASTER_COUNT_2011_2024", "FEMA_PA_HM", "FEMA_PER_CAPITA", "POPULATION",
+    "DISASTER_COUNT_2011_2024", "STATE_DISASTER_COUNT", "FEMA_PA_HM", "FEMA_PER_CAPITA", "POPULATION",
     "CDC_SVI_2022", "OMB_CLASS", "SAIDI_MIN_AVG", "SAIDI_MIN_MAX",
     "PCT_POP_60PLUS", "AGE_CLASS", "PCT_MINORITY", "HEAT_NRI",
     "COMPOUND_RISK_COUNT_NATL",
@@ -222,6 +223,11 @@ for fips, c in sorted(counties.items()):
         "COUNTY": p["County Name"],
         "STATE": "West Virginia",
         "DISASTER_COUNT_2011_2024": a.get("COUNTY_DISASTER_COUNT", ""),
+        # Repeated on every row. West Virginia's actual number of federal major
+        # disaster declarations, 2011-2024. Use THIS for a statewide figure.
+        # Never sum DISASTER_COUNT_2011_2024: one event is declared across many
+        # counties at once, so the column sum double-counts the event.
+        "STATE_DISASTER_COUNT": a.get("STATE_DISASTER_COUNT", ""),
         "FEMA_PA_HM": a.get("COUNTY_TOTAL_FEMA", ""),
         "FEMA_PER_CAPITA": a.get("COUNTY_PER_CAPITA", ""),
         "POPULATION": a.get("COUNTY_POPULATION", ""),

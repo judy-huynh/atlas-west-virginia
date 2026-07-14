@@ -114,7 +114,8 @@ fetch('data/wv_county_profile.csv')
   .then(t=>{
     D=parseCSV(t).map(r=>({
       c:r.COUNTY, basin:r.BASIN, cls:r.OMB_CLASS,
-      dis:num(r.DISASTER_COUNT_2011_2024), fema:num(r.FEMA_PA_HM), pc:num(r.FEMA_PER_CAPITA),
+      dis:num(r.DISASTER_COUNT_2011_2024), statedis:num(r.STATE_DISASTER_COUNT),
+      fema:num(r.FEMA_PA_HM), pc:num(r.FEMA_PER_CAPITA),
       svi:+num(r.CDC_SVI_2022).toFixed(2), saidi:Math.round(num(r.SAIDI_MIN_AVG)),
       old:+num(r.PCT_POP_60PLUS).toFixed(1),
       rate:r.FLOOD_RISK_RATING, natl:+num(r.FLOOD_EAL_NATL_PCTILE).toFixed(1),
@@ -136,6 +137,7 @@ function init(){
   // Everything below is genuinely additive: dollars, properties, areas.
   document.getElementById('stats').innerHTML=[
     [D.length,'Counties'],
+    [D[0].statedis,'Federal disaster declarations, statewide'],
     ['$'+(D.reduce((s,d)=>s+d.fema,0)/1e6).toFixed(1)+'M','FEMA PA + HM'],
     ['$'+(D.reduce((s,d)=>s+d.eal,0)/1e6).toFixed(0)+'M','Flood loss per year'],
     [D.reduce((s,d)=>s+d.buy,0).toLocaleString(),'Buyout properties'],
@@ -159,7 +161,10 @@ function init(){
     'which flattens a small state where flooding is everywhere. <b>Natl flood %ile</b> is where the county actually ranks nationally for flood loss. '+
     'The median West Virginia county sits in the <b>96th percentile</b> and <b>'+above90+' of 55</b> are above the 90th. '+
     'FEMA labels <b>'+bad.length+' counties “Relatively Low” that sit above the 99th national percentile</b>, including '+
-    bad.slice(0,3).map(d=>d.c+' ('+d.natl+')').join(', ')+'. <b>Sort by the percentile, not the rating.</b>';
+    bad.slice(0,3).map(d=>d.c+' ('+d.natl+')').join(', ')+'. <b>Sort by the percentile, not the rating.</b>'+
+    '<br><br><b>Do not add the Disasters column up.</b> One storm is declared across many counties at once, so summing the column counts the same event repeatedly. '+
+    'West Virginia has had <b>'+D[0].statedis+' federal disaster declarations</b> in total. The most any single county saw is <b>'+
+    Math.max(...D.map(d=>d.dis))+'</b> ('+D.find(d=>d.dis===Math.max(...D.map(x=>x.dis))).c+').';
   draw();
 }
 

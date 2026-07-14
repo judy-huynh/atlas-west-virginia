@@ -42,7 +42,8 @@ All source files are in `atlas-of-accountability-v4 wv/data`.
 ### Atlas of Accountability core (2011 to 2024)
 | Column | Notes |
 |---|---|
-| `DISASTER_COUNT_2011_2024` | Federal major disaster declarations |
+| `DISASTER_COUNT_2011_2024` | Federal major disaster declarations that included this county. **Not additive across counties.** |
+| `STATE_DISASTER_COUNT` | **23.** West Virginia's actual number of federal major disaster declarations, 2011 to 2024. Repeated on every row. Use this for any statewide figure. |
 | `FEMA_PA_HM` | FEMA Public Assistance + Hazard Mitigation, dollars |
 | `FEMA_PER_CAPITA`, `POPULATION` | |
 | `CDC_SVI_2022` | CDC Social Vulnerability Index, 0 to 1 |
