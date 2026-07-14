@@ -13,12 +13,13 @@ h1{font-size:2.1rem;margin:1.1rem 0 .3rem;letter-spacing:-.02em}
 .sub{color:var(--ink);margin:0 0 1.8rem;max-width:54rem}
 h2{font-size:.75rem;text-transform:uppercase;letter-spacing:.11em;margin:0 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
 h2.mt{margin-top:1.8rem}
-.grid{display:grid;grid-template-columns:20rem 1fr;gap:2rem;align-items:start}
-/* Grid children default to min-width:auto, so the wide table forced its column
-   open and the whole page scrolled sideways. Let the column shrink; the table
-   scrolls inside .tw instead. */
+/* minmax(0,1fr), not 1fr. A bare 1fr track has an automatic minimum equal to
+   its content, so the wide county table forced the column open and the whole
+   page scrolled sideways. minmax(0,...) lets the track shrink, and the table
+   scrolls inside .tw as intended. */
+.grid{display:grid;grid-template-columns:20rem minmax(0,1fr);gap:2rem;align-items:start}
 .grid>*{min-width:0}
-@media(max-width:960px){.grid{grid-template-columns:1fr}}
+@media(max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
 
 .exl{font-size:.75rem;color:var(--grey);margin:-.35rem 0 .55rem}
 .roles{display:grid;gap:0}
