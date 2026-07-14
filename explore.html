@@ -23,10 +23,11 @@ h2.mt{margin-top:1.8rem}
 
 .exl{font-size:.75rem;color:var(--grey);margin:-.35rem 0 .55rem}
 .roles{display:grid;gap:0}
-.role{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;
-  text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);
+.rolerow{display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--rule)}
+.rolerow:last-of-type{border-bottom:0}
+.role{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex:1;min-width:0;
+  text-align:left;background:none;border:0;
   padding:.5rem .1rem;cursor:pointer;font:inherit;font-size:.83rem;color:var(--grey)}
-.role:last-child{border-bottom:0}
 .role:hover{color:var(--on)}
 .role.on{color:var(--on);font-weight:700}
 .role .n{flex:1;min-width:0}
@@ -45,6 +46,7 @@ h2.mt{margin-top:1.8rem}
 .qm{flex:none;width:1.05rem;height:1.05rem;border-radius:50%;border:1px solid var(--grey);color:var(--grey);
   background:none;font:700 .68rem/1 Arial;cursor:pointer;margin-top:.2rem}
 .qm:hover{border-color:var(--on);color:var(--on)}
+.roletip{margin-left:0;margin-bottom:.5rem}
 .tip{grid-column:1/-1;font-size:.76rem;color:var(--grey);background:var(--tint);border-left:2px solid var(--on);
   padding:.5rem .65rem;margin:.1rem 0 .35rem 1.6rem;line-height:1.5}
 .tip b{color:var(--ink)}
@@ -206,38 +208,47 @@ const ROLES=[
  {n:'Policymakers and state agencies',
   d:'Show that $5 million is nowhere near the size of the problem.',
   on:['natl','pc'],
+  what:'<b>Who this is for.</b> The State Resiliency Office, the Governor’s office, legislators on finance and infrastructure committees, and the agencies that decide where state money goes.<br><br><b>What they need from this.</b> A number that shows the scale of the gap. West Virginia has <b>$5 million</b> for flood resiliency. These filters find the counties whose flood losses rank among the worst in the country and which have received almost nothing in federal recovery money. The comparison between what they lose each year and what they have been given is the argument.',
   why:'West Virginia has secured <b>$5 million</b> for flood resiliency for the first time. These 16 counties lose <b>$174.6 million every year</b> to flooding, are among the worst 5% of counties in the entire United States, and have received <b>$3.1 million</b> in FEMA funding across fourteen years combined. The annual loss in these counties alone is <b>35 times</b> the money the state has to work with. That is the gap argument, on one screen.'},
- {n:'Grant writing',
-  d:'The shortlist with the strongest documented case.',
-  on:['natl','pc','dis'],
-  why:'A competitive application needs three things, and these filters supply all three: <b>the hazard is severe</b> (top 5% of U.S. counties for flood loss), <b>it keeps happening</b> (five or more federal disaster declarations), and <b>the need is unmet</b> (below the state median in federal dollars per resident). Seven counties clear all three. <b>Click any county for a sourced paragraph you can paste straight into a narrative.</b>'},
  {n:'Emergency management',
   d:'Where a flood becomes a crisis.',
   on:['dis','sd'],
+  what:'<b>Who this is for.</b> County and state emergency managers, 911 and dispatch, mutual aid coordinators, the National Guard, and utilities planning for outage response.<br><br><b>What they need from this.</b> Not where flooding is worst, but where a flood turns into an emergency the county cannot handle alone. These filters find counties that flood repeatedly <b>and</b> lose power for long stretches. No power means no pumps, no heat, no medical equipment, no way to call for help. Add <b>Hard to recover</b> to see where residents also have the least capacity to absorb the shock.',
   why:'Not where flooding is worst, but where it compounds. These counties flood repeatedly <b>and</b> sit in the worst quarter of the state for power reliability. No power means no pumps, no heat, no medical equipment, no way to call for help. Add <b>Hard to recover</b> to see where residents also have the least capacity to absorb the shock.'},
  {n:'City and municipal planning',
   d:'Where the water is, and where not to build.',
   on:['natl','fp'],
+  what:'<b>Who this is for.</b> County and municipal planners, floodplain administrators, zoning boards, building officials, and anyone siting a school, clinic, fire station, or water plant.<br><br><b>What they need from this.</b> Where the water actually is. These filters find counties with both nationally extreme flood losses and a large share of their land inside the high-risk flood zone. These are the permitting and capital-planning decisions: what gets built, what gets elevated, and what should not be rebuilt where it stood. Add <b>Retreat already underway</b> to see where buyouts have already started.',
   why:'Counties with both nationally extreme flood losses and a large share of their land inside the high-risk flood zone. These are the zoning, permitting, and capital-planning questions: where the next school, clinic, or fire station should <b>not</b> go. Add <b>Retreat already underway</b> to see where buyouts have already started.'},
  {n:'Communities and advocacy',
   d:'Counties carrying risk that nobody has mapped.',
   on:['natl','svi'],
+  what:'<b>Who this is for.</b> Community organizations, watershed and river groups, faith and mutual aid networks, and residents making the case for their own county.<br><br><b>What they need from this.</b> West Virginia is rarely mapped in this kind of work, and the counties least likely to appear in a national dataset are often carrying the most. These filters find counties where flood losses are among the worst in the country <b>and</b> residents have the least capacity to recover: lower incomes, older populations, fewer vehicles, less secure housing. These are the places that are hardest hit and least counted.',
   why:'West Virginia is rarely mapped in this kind of work, and the places least likely to appear in a national dataset are often carrying the most. These counties combine flood losses among the worst in the country with residents who have the least capacity to recover: lower incomes, older populations, fewer vehicles, less housing security.'},
 ];
 
 let sel=new Set(), sort='natl', asc=false, open=null, tip=null;
 
+let rtip=null;   // which example's explanation is expanded
 function buildRoles(){
 const R=document.getElementById('roles');
 R.innerHTML='';
 ROLES.forEach((r,i)=>{
   const act=FACTORS.filter(f=>r.on.includes(f.k));
   const hits=D.filter(d=>act.every(f=>f.f(d))).length;
-  const b=document.createElement('button'); b.className='role'; b.dataset.i=i;
-  b.title=r.d;
+  const row=document.createElement('div'); row.className='rolerow';
+  const b=document.createElement('button'); b.className='role'; b.dataset.i=i; b.title=r.d;
   b.innerHTML='<span class="n">'+r.n+'</span><span class="k">'+hits+'</span>';
   b.onclick=()=>{sel=new Set(r.on); open=null; draw();};
-  R.appendChild(b);
+  const q=document.createElement('button'); q.className='qm'; q.textContent='?';
+  q.title='Who is this for?';
+  q.onclick=e=>{e.stopPropagation(); rtip=(rtip===i?null:i); draw();};
+  row.appendChild(b); row.appendChild(q);
+  R.appendChild(row);
+  if(rtip===i){
+    const t=document.createElement('div'); t.className='tip roletip'; t.innerHTML=r.what;
+    R.appendChild(t);
+  }
 });
 }
 
