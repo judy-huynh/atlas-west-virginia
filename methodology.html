@@ -36,7 +36,6 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 <div class="brand">
   <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
-  <!-- Findings link hidden until the Findings page is ready. -->
   <span><a href="./" style="color:var(--crimson)">County table</a></span>
 </div>
 
@@ -68,7 +67,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 
 <tr><td class="c">Buyouts</td>
 <td>How many individual properties have been bought out and cleared because they kept flooding. Funded by FEMA, the Army Corps, the USDA, HUD, or the community itself. McDowell County alone has 708 of the state's 2,826.<span class="mapped">Mapped</span></td>
-<td class="s">FEMA, USACE, NRCS and HUD buyout records</td></tr>
+<td class="s">FEMA, Army Corps, USDA and HUD buyout records</td></tr>
 
 <tr><td class="c">Rep. loss</td>
 <td>Repetitive loss areas: places FEMA has formally flagged as flooding over and over. These are <b>areas, not houses</b>. Only 11 of the 55 counties have any.</td>
@@ -95,7 +94,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 <td class="s"><a href="https://www.eia.gov/electricity/data/eia861/">U.S. Energy Information Administration</a></td></tr>
 
 <tr><td class="c">SVI</td>
-<td>Social Vulnerability Index, from 0 to 1. It measures how hard it would be for a community to cope with and recover from a disaster, based on income, age, disability, housing, transportation, and language. A score of 0.90 means more vulnerable than 90% of U.S. counties.</td>
+<td>A 0-to-1 score for how hard it would be for a community to weather a disaster and recover, based on income, age, disability, housing, transportation, and language. The higher the score, the harder recovery is: 0.90 means it would be tougher here than in 90% of U.S. counties. The CDC calls this the Social Vulnerability Index.</td>
 <td class="s"><a href="https://www.atsdr.cdc.gov/placeandhealth/svi/">CDC Social Vulnerability Index, 2022</a></td></tr>
 
 <tr><td class="c">% 60+</td>
@@ -116,10 +115,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 
 <p><b>Percent in floodplain.</b> The flood zone arrives as one continuous shape covering the whole state, with no county lines in it. It was laid over each county's boundary, and the overlapping area was measured and divided by the county's total area.</p>
 
-<p><b>Basin.</b> Counties were matched to the watersheds they sit in. A county is only counted as belonging to a second basin if a real share of it (at least 1%) is actually there. Without that rule, eight eastern counties appeared to straddle both basins because of tiny slivers along the ridgeline, which was a mapping artifact rather than a fact. With the rule, only Monroe County genuinely sits in both.</p>
+<p><b>Basin.</b> Counties were matched to the watersheds they sit in. A county is only counted as belonging to a second basin if a real share of it (at least 1%) is actually there. Without that rule, eight eastern counties looked like they sat in both basins because of tiny slivers of land along the ridgeline, a quirk of the map rather than a real fact. With the rule, only Monroe County genuinely sits in both.</p>
 
 <div class="warn">
-<b>One caveat on the floodplain numbers.</b> The flood map file we were given does not record which edition of FEMA's flood maps it came from. The measurements are sound, but the vintage of the underlying map should be confirmed before the floodplain percentages are published anywhere.
+<b>One caveat on the floodplain numbers.</b> The flood-map file used here does not say which edition of FEMA's flood maps it came from. The measurements themselves are sound; the exact date of the underlying map just has not been confirmed yet.
 </div>
 
 <div class="note">
