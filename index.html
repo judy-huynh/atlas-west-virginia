@@ -193,8 +193,7 @@ const COLS=[
   ['svi',  'SVI',             'd'],
   ['saidi','Outage hrs/yr',   'h'],
   ['old',  '% 60+',           'p'],
-  ['rate', 'Flood risk',      't', 1],
-  ['natl', 'Natl flood %ile', 'x'],
+  ['natl', 'Natl flood %ile', 'x', 1],
   ['fp',   '% in floodplain', 'p'],
   ['rl',   'Rep. loss',       'n'],
   ['buy',  'Buyouts',         'n'],
@@ -299,9 +298,9 @@ function init(){
 
   const bad=D.filter(d=>d.rate==='Relatively Low' && d.natl>=99);
   document.getElementById('ratingnote').innerHTML=
-    '<b>The table has two flood columns, and they are supposed to disagree.</b> <b>Flood risk</b> is FEMA&rsquo;s own grade, set on a curve against the whole country, which buries a small state where the water gets everywhere. '+
-    '<b>Natl flood %ile</b> is where the county really ranks against the rest of America. FEMA still tags <b>'+bad.length+' counties &ldquo;Relatively Low&rdquo; that actually sit in the nation&rsquo;s worst 1%</b>, including '+
-    bad.slice(0,3).map(d=>d.c).join(', ')+'. <b>Go by the national ranking, not FEMA&rsquo;s tag.</b>';
+    '<b>The flood column is a national rank.</b> <b>Natl flood %ile</b> is where the county stands against every county in America for flood loss: 99 means only 1% of U.S. counties lose more. '+
+    'We lead with this instead of FEMA&rsquo;s own flood-risk rating, which is graded on a curve against the whole country and buries a small state where the water gets everywhere. '+
+    'FEMA still tags <b>'+bad.length+' West Virginia counties &ldquo;Relatively Low&rdquo; that actually sit in the nation&rsquo;s worst 1%</b>, including '+bad.slice(0,3).map(d=>d.c).join(', ')+'.';
   draw();
 }
 
