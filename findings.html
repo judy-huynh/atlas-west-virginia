@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Findings &middot; Atlas of Disaster West Virginia</title>
 <style>
 :root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;}
@@ -41,24 +43,24 @@ footer b{color:var(--ink)}
 <div class="wrap">
 <div class="brand">
   <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
-  <span><a href="./">County table</a> &nbsp;&middot;&nbsp; <a href="explore.html">Explorer</a> &nbsp;&middot;&nbsp; <a href="methodology.html">About the data</a></span>
+  <span><a href="./">County table</a> &nbsp;&middot;&nbsp; <a href="methodology.html">About the data</a></span>
 </div>
 
 <h1>Where West Virginia actually stands</h1>
-<p class="deck">West Virginia floods worse than almost anywhere in the country. The tools meant to measure that risk are the reason nobody knows it.</p>
+<p class="deck">West Virginia floods about as bad as anywhere in America. The federal scorecard that is supposed to measure it is the reason Washington does not see it, and the reason the money does not come back.</p>
 
 <div class="big" id="big"></div>
 
 <p class="kicker">The problem</p>
 <h2>FEMA's own rating makes West Virginia look safer than it is</h2>
 
-<p>FEMA scores every county's flood risk <strong>relative to the whole United States</strong>. In a state where flooding is everywhere, that comparison flattens. Counties that would be alarming anywhere else get graded against a national field and come out looking ordinary.</p>
+<p>FEMA grades every county's flood risk <strong>on a curve against the whole United States</strong>. In a state where the water gets everywhere, that curve flattens everything out. Counties that would set off alarms anywhere else get graded against the whole country and come out looking ordinary.</p>
 
 <p id="lowbut"></p>
 
 <div class="pull" id="pull1"></div>
 
-<p>A label like that does real damage. It is what a grant reviewer sees. It is what a national dataset carries forward. It is how a county with catastrophic flood losses gets sorted into the pile marked <em>not urgent</em>.</p>
+<p>A tag like that does real harm. It is what a grant reviewer sees. It is what the next national dataset copies down. It is how a county with devastating flood losses gets tossed on the pile marked <em>not urgent</em> and passed over when the money goes out.</p>
 
 <div class="tw"><table>
 <thead><tr><th>County</th><th>FEMA's rating</th><th class="num">Where it actually ranks nationally</th><th class="num">Flood loss per year</th></tr></thead>
@@ -99,7 +101,7 @@ footer b{color:var(--ink)}
 
 <div class="cta">
   <a href="./">See all 55 counties</a>
-  <a href="explore.html">Find the counties that carry several risks</a>
+  <a href="./">Find the counties that carry several risks</a>
   <a href="methodology.html">How this was measured</a>
 </div>
 
@@ -172,14 +174,14 @@ fetch('data/wv_county_profile.csv').then(r=>r.text()).then(t=>{
   // the funding gap
   const m=median('pc');
   const gap=D.filter(d=>d.natl>=95 && d.pc<=m).sort((a,b)=>b.eal-a.eal);
-  $('gap1').innerHTML='Federal recovery money follows declared damage, not need. Half of West Virginia&rsquo;s counties have received '+
-    '<strong>$'+m+' or less per resident</strong> across fourteen years.';
-  $('pull2').innerHTML='<strong>'+gap.length+' counties</strong> are in the worst 5% in the country for flood loss <em>and</em> receive below even that state median. '+
-    'They lose <strong>'+money(gap.reduce((s,d)=>s+d.eal,0))+' a year</strong> to flooding. Since 2011 they have received '+
-    '<strong>'+money(gap.reduce((s,d)=>s+d.fema,0))+'</strong> in FEMA funding, combined.';
+  $('gap1').innerHTML='Federal recovery money follows paperwork and declared damage, not real need. Half of West Virginia&rsquo;s counties have gotten back '+
+    '<strong>$'+m+' or less per person</strong> in fourteen years.';
+  $('pull2').innerHTML='<strong>'+gap.length+' counties</strong> rank in the worst 5% in the country for flood loss <em>and</em> still get back less than even West Virginia&rsquo;s own middle county. '+
+    'They lose <strong>'+money(gap.reduce((s,d)=>s+d.eal,0))+' a year</strong> to flooding. Since 2011, Washington has sent them '+
+    '<strong>'+money(gap.reduce((s,d)=>s+d.fema,0))+'</strong> in FEMA money, combined.';
   const worst=[...gap].sort((a,b)=>a.pc-b.pc)[0];
-  $('gap2').innerHTML='<strong>'+gap[0].c+' County</strong> loses '+money(gap[0].eal)+' a year and has received <strong>$'+gap[0].pc+' per resident</strong>. '+
-    '<strong>'+worst.c+' County</strong> sits in the '+worst.natl.toFixed(1)+'th percentile nationally and has received <strong>$'+worst.pc+'</strong>.';
+  $('gap2').innerHTML='<strong>'+gap[0].c+' County</strong> loses '+money(gap[0].eal)+' a year and has gotten back <strong>$'+gap[0].pc+' per person</strong>. '+
+    '<strong>'+worst.c+' County</strong> sits in the '+worst.natl.toFixed(1)+'th percentile in the nation and has gotten back <strong>$'+worst.pc+'</strong>.';
   $('gaptable').innerHTML=gap.map(d=>'<tr><td><b>'+d.c+'</b></td><td class="num"><span class="bad">'+d.natl.toFixed(1)+'</span></td>'+
     '<td class="num">'+money(d.eal)+'</td><td class="num">$'+d.pc+'</td></tr>').join('');
 
@@ -189,21 +191,21 @@ fetch('data/wv_county_profile.csv').then(r=>r.text()).then(t=>{
   $('buyouts').innerHTML='<strong>'+sum('buy').toLocaleString()+' properties</strong> in West Virginia have already been bought out and cleared because they kept flooding. '+
     '<strong>'+mb.buy.toLocaleString()+' of them are in '+mb.c+' County alone</strong>, more than double any other county in the state. '+
     'FEMA has formally designated <strong>'+sum('rl')+' repetitive loss areas</strong>, and they are concentrated in just <strong>'+rlc+' of '+N+' counties</strong>. '+
-    'Managed retreat is not a future policy question in West Virginia. It has been happening for years, without anyone calling it that.';
+    'This is not some far-off policy debate. Taxpayers have already been paying to move families out of harm&rsquo;s way for years; nobody just put a name to it.';
 
   // compounding
   const ms=[...D].sort((a,b)=>b.saidi-a.saidi)[0];
   const mf=[...D].sort((a,b)=>b.fp-a.fp)[0];
   const same=ms.c===mf.c;
   $('compound').innerHTML='<strong>'+ms.c+' County</strong> has the worst power reliability in the state: the average customer spends '+
-    '<strong>'+Math.round(ms.saidi).toLocaleString()+' minutes</strong> without electricity every year, more than '+Math.floor(ms.saidi/60)+' hours. '+
+    '<strong>'+(ms.saidi/60).toFixed(1)+' hours</strong> without electricity every year. '+
     (same ? 'It also has <strong>the largest share of any county inside the high-risk flood zone ('+mf.fp.toFixed(1)+'%)</strong>. The same county. ' : '') +
-    'That is what compound risk means in practice.';
+    'That is what it looks like when the trouble stacks up.';
 
   // basins
   const ohio=D.filter(d=>d.basin==='Ohio River').length, ches=D.filter(d=>d.basin==='Chesapeake Bay').length;
   $('basins').innerHTML='<strong>'+ohio+' counties drain to the Ohio River. '+ches+' drain to the Chesapeake Bay.</strong> '+
-    'Federal watershed programs are organised by basin, and the two basins are not funded alike. '+
+    'Federal watershed programs are organized by basin, and the two basins are not funded alike. '+
     'Which side of a ridgeline a county sits on shapes what money it can even apply for, and that has nothing to do with how badly it floods.';
 }).catch(e=>{
   document.querySelector('.wrap').insertAdjacentHTML('beforeend',

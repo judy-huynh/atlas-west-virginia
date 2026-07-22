@@ -41,7 +41,7 @@ The data is built to be used by people who have to justify a decision:
 - **City and municipal planners**, who need to know where the water is before siting a school, clinic, or fire station.
 - **Communities and advocates**, who need evidence for a county that no national dataset has ever bothered to look at.
 
-The [Compound Risk Explorer](https://judy-huynh.github.io/atlas-west-virginia/explore.html) lets each of them ask their own question of the same data, and **click any county to get a sourced paragraph** they can put straight into an application or a briefing.
+The [County Risk Profile](https://judy-huynh.github.io/atlas-west-virginia/) lets each of them ask their own question of the same data: sort every column, tick the compound-risk factors that matter to their work to find the counties carrying several at once, and **click any county to get a sourced paragraph** they can put straight into an application or a briefing.
 
 ---
 
@@ -62,8 +62,7 @@ Being clear about the limits is part of the point.
 | Page | What it does |
 |---|---|
 | **[Findings](https://judy-huynh.github.io/atlas-west-virginia/findings.html)** | Where West Virginia actually stands. Every figure computed live from the data. |
-| **[County Risk Profile](https://judy-huynh.github.io/atlas-west-virginia/)** | All 55 counties, every column, sortable. |
-| **[Compound Risk Explorer](https://judy-huynh.github.io/atlas-west-virginia/explore.html)** | Filter by the risks that matter to your work. Click a county for a sourced evidence paragraph. |
+| **[County Risk Profile](https://judy-huynh.github.io/atlas-west-virginia/)** | All 55 counties, every column, sortable. Tick compound-risk factors to find the counties carrying several at once, and click any county for a sourced evidence paragraph. |
 | **[About the data](https://judy-huynh.github.io/atlas-west-virginia/methodology.html)** | What every column means and where it comes from. |
 
 ---

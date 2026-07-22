@@ -1,25 +1,78 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>West Virginia County Risk Profile &middot; Atlas of Disaster</title>
 <style>
-:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;--ohio:#2171b5;--ches:#238b45;}
-@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;--ohio:#6baed6;--ches:#66c2a4;}}
-:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;--ohio:#6baed6;--ches:#66c2a4;}
-:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;--ohio:#2171b5;--ches:#238b45;}
+:root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;--ohio:#2171b5;--ches:#238b45;--on:#C0392B;--hit:#fdf0ee;--hitline:#f0cfc9;}
+@media(prefers-color-scheme:dark){:root{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;--ohio:#6baed6;--ches:#66c2a4;--on:#f0796a;--hit:#2a1c1a;--hitline:#5a332c;}}
+:root[data-theme="dark"]{--head:#f2f2f2;--crimson:#f0796a;--ink:#f2f2f2;--grey:#a0a0a0;--rule:#333;--tint:#1c1c1c;--bg:#111;--card:#191919;--dim:#666;--ohio:#6baed6;--ches:#66c2a4;--on:#f0796a;--hit:#2a1c1a;--hitline:#5a332c;}
+:root[data-theme="light"]{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;--dim:#9a9a9a;--ohio:#2171b5;--ches:#238b45;--on:#C0392B;--hit:#fdf0ee;--hitline:#f0cfc9;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Arial,Helvetica,sans-serif;font-variant-numeric:tabular-nums}
-.wrap{max-width:84rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+.wrap{max-width:88rem;margin:0 auto;padding:2rem 1.25rem 4rem}
 .brand{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--head);font-weight:700;border-bottom:3px solid var(--head);padding-bottom:.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
 .brand a{color:var(--crimson);text-decoration:none;letter-spacing:.05em}
 .brand a:hover{text-decoration:underline}
 h1{font-size:2.2rem;margin:1.1rem 0 .2rem;color:var(--head);letter-spacing:-.02em}
-.sub{color:var(--ink);margin:0 0 1.5rem;max-width:56rem}
+.sub{color:var(--ink);margin:0 0 1.5rem}
 .sub a{color:var(--crimson)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1.5rem}
 .st{background:var(--card);padding:.9rem 1rem}
 .st b{display:block;font-size:1.6rem;color:var(--crimson);line-height:1.1}
 .st span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--grey);margin-top:.25rem}
-.ctl{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem}
-input,select{font:inherit;font-size:.85rem;padding:.45rem .6rem;border:1px solid var(--rule);background:var(--card);color:var(--ink)}
-input:focus,select:focus{outline:2px solid var(--crimson);outline-offset:1px}
+
+/* Two columns: a fixed filter rail and the table. minmax(0,1fr) lets the
+   table track shrink so the wide table scrolls inside .tw instead of forcing
+   the whole page sideways. */
+.grid{display:grid;grid-template-columns:21rem minmax(0,1fr);gap:2rem;align-items:start}
+.grid>*{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+h2{font-size:.75rem;text-transform:uppercase;letter-spacing:.11em;margin:0 0 .7rem;padding-bottom:.3rem;border-bottom:1px solid var(--rule);color:var(--head)}
+h2.mt{margin-top:1.7rem}
+/* Only the text search and the dropdowns get the full-width box treatment.
+   Scoped to input[type=search] so it never touches the checkboxes below. */
+.rail input[type=search],.rail select{font:inherit;font-size:.85rem;padding:.45rem .6rem;border:1px solid var(--rule);background:var(--card);color:var(--ink);width:100%}
+.rail input[type=search]:focus,.rail select:focus{outline:2px solid var(--crimson);outline-offset:1px}
+.selrow{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem}
+
+/* Multi-county picker: tick several specific counties to compare side by side. */
+.multi{position:relative;margin-top:.5rem}
+.mbtn{font:inherit;font-size:.85rem;padding:.45rem .6rem;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;width:100%;text-align:left}
+.mbtn:hover{border-color:var(--crimson)}
+.mbtn.act{border-color:var(--crimson);color:var(--crimson);font-weight:700}
+.panel{position:absolute;top:calc(100% + 4px);left:0;z-index:20;width:24rem;max-width:92vw;background:var(--bg);border:1px solid var(--head);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.panelhd{display:flex;justify-content:space-between;align-items:center;padding:.5rem .65rem;border-bottom:1px solid var(--rule);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--grey)}
+.panelhd button{font:inherit;font-size:.68rem;background:none;border:0;color:var(--crimson);cursor:pointer;text-transform:uppercase;letter-spacing:.06em;padding:0}
+.plist{max-height:17rem;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;padding:.3rem}
+.plist label{display:flex;align-items:center;gap:.4rem;padding:.28rem .4rem;font-size:.8rem;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plist label:hover{background:var(--tint)}
+.plist input{margin:0;width:auto;accent-color:var(--crimson);cursor:pointer;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin:.55rem 0 0}
+.chip{display:inline-flex;align-items:center;gap:.3rem;font-size:.75rem;padding:.2rem .25rem .2rem .5rem;border:1px solid var(--crimson);color:var(--crimson);background:var(--card);font-weight:700}
+.chip button{font:inherit;line-height:1;background:none;border:0;color:var(--crimson);cursor:pointer;font-size:1rem;padding:0 .15rem;width:auto}
+.chip button:hover{color:var(--ink)}
+
+.exl{font-size:.75rem;color:var(--grey);margin:0 0 .7rem;line-height:1.5}
+.facs{display:grid;gap:.15rem}
+.fac{display:flex;align-items:flex-start;gap:.55rem;padding:.45rem .5rem;border:1px solid transparent}
+.fac:hover{background:var(--tint)}
+.fac input{margin:.25rem 0 0;accent-color:var(--on);flex:none;cursor:pointer}
+.fac .lab{flex:1;min-width:0;cursor:pointer}
+.fac b{display:block;font-size:.85rem;font-weight:400}
+.fac.on b{font-weight:700}
+.fac em{font-style:normal;font-size:.73rem;color:var(--grey);display:block}
+.fac .ct{font-size:.72rem;color:var(--grey);white-space:nowrap;padding-top:.15rem}
+.qm{flex:none;width:1.05rem;height:1.05rem;border-radius:50%;border:1px solid var(--grey);color:var(--grey);background:none;font:700 .68rem/1 Arial;cursor:pointer;margin-top:.2rem}
+.qm:hover{border-color:var(--on);color:var(--on)}
+.tip{font-size:.76rem;color:var(--grey);background:var(--tint);border-left:2px solid var(--on);padding:.5rem .65rem;margin:.1rem 0 .35rem 1.6rem;line-height:1.5}
+.tip b{color:var(--ink)}
+.only{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--ink);margin:.8rem 0 0;cursor:pointer;padding:.35rem 0}
+.only input{accent-color:var(--on);cursor:pointer}
+.reset{width:100%;margin-top:.7rem;font:inherit;font-size:.75rem;padding:.45rem;background:none;border:1px solid var(--rule);color:var(--grey);cursor:pointer}
+.reset:hover{border-color:var(--on);color:var(--on)}
+
+.summary{font-size:.9rem;line-height:1.55;margin:0 0 1rem;min-height:1.4em}
+.summary b{color:var(--on)}
 .tw{overflow-x:auto;border:1px solid var(--rule)}
 table{width:100%;border-collapse:collapse;font-size:.84rem}
 th{position:sticky;top:0;background:var(--bg);text-align:left;padding:.55rem .6rem;border-bottom:2px solid var(--head);white-space:nowrap;cursor:pointer;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;user-select:none}
@@ -27,17 +80,37 @@ th:hover{color:var(--crimson)}
 th.s::after{content:" \2193";color:var(--crimson)}
 th.s.a::after{content:" \2191"}
 th.grp,td.grp{border-left:1px solid var(--rule)}
-td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:.5rem .6rem;border-bottom:1px solid var(--rule);white-space:nowrap;transition:background .12s,color .12s}
 tbody tr:nth-child(even) td{background:var(--tint)}
 tbody tr:hover td{background:var(--card)}
 td.num{text-align:right}
+tbody tr[data-c]{cursor:pointer}
 .pill{display:inline-block;padding:.05rem .4rem;font-size:.7rem;font-weight:700;border:1px solid currentColor}
 .ohio{color:var(--ohio)}.ches{color:var(--ches)}
 .hi{color:var(--crimson);font-weight:700}
 .natl{display:inline-block;padding:.05rem .4rem;font-size:.72rem;font-weight:700;border:1px solid var(--dim);color:var(--grey)}
 .natl.bad{background:var(--crimson);border-color:var(--crimson);color:#fff}
+
+/* ---- MATCHED: a county that meets every ticked compound-risk factor. -----
+   The row is the unit of emphasis: an accent rail on the first cell, a warm
+   tint across the row, the county name in bold. */
+tbody tr.hit td,tbody tr.hit:nth-child(even) td{background:var(--hit);border-bottom-color:var(--hitline);color:var(--ink)}
+tbody tr.hit td:first-child{box-shadow:inset 4px 0 0 var(--on);font-weight:700;padding-left:.85rem}
+tbody tr.hit:hover td{background:var(--hit);filter:brightness(.98)}
+/* ---- NOT MATCHED: recede, but stay readable. --------------------------- */
+tbody tr.miss td,tbody tr.miss:nth-child(even) td{background:var(--bg);color:var(--dim)}
+tbody tr.miss .natl,tbody tr.miss .pill{border-color:var(--dim);color:var(--dim)}
+tbody tr.miss .natl.bad{background:none;border-color:var(--dim);color:var(--dim)}
+tbody tr.miss:hover td{background:var(--tint);color:var(--grey)}
+
+tr.ev td{background:var(--hit);white-space:normal;cursor:default;border-bottom-color:var(--hitline)}
+tr.ev td:first-child{box-shadow:inset 4px 0 0 var(--on)}
+.ev-box .h{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--on);font-weight:700}
+.ev-box p{margin:.4rem 0 .5rem;font-size:.87rem;line-height:1.65;max-width:52rem}
+.ev-box small{color:var(--grey);font-size:.72rem}
 .note{background:var(--tint);border-left:3px solid var(--crimson);padding:.9rem 1.1rem;font-size:.85rem;margin-top:1.2rem;line-height:1.6}
 .note b{color:var(--ink)}
+.note a{color:var(--crimson)}
 footer{margin-top:1.2rem;font-size:.74rem;color:var(--grey);line-height:1.6}
 footer b{color:var(--ink)}
 footer a{color:var(--crimson)}
@@ -46,29 +119,48 @@ footer a{color:var(--crimson)}
 <div class="wrap">
 <div class="brand">
   <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
-  <span><a href="findings.html">Findings</a> &nbsp;&middot;&nbsp; <a href="explore.html">Compound risk explorer</a> &nbsp;&middot;&nbsp; <a href="methodology.html">About the data</a></span>
+  <!-- Findings link hidden until the Findings page is ready; restore the Findings <a> here and in the note + methodology nav. -->
+  <span><a href="methodology.html">About the data</a></span>
 </div>
 
 <h1>West Virginia County Risk Profile</h1>
-<p class="sub">Every county, every risk, in one place. All 55 counties, with disaster, funding, vulnerability, and flood data. Click any column to sort. Use the <a href="explore.html">compound risk explorer</a> to find the counties carrying several risks at once.</p>
+<p class="sub">Every West Virginia county, every flood risk, in one place. All 55 counties side by side: how often they flood, what they lose, and how much of your federal tax dollars have actually come back. <b>Click any column to sort</b>, <b>check the boxes</b> to find the counties getting hit from several directions at once, and <b>click any county for a plain, sourced write-up</b> you can drop into a grant application or hand to a legislator.</p>
 
 <div class="stats" id="stats"></div>
 
-<div class="ctl">
-  <input id="q" type="search" placeholder="Filter counties...">
-  <select id="basin"><option value="">All basins</option><option>Ohio River</option><option>Chesapeake Bay</option></select>
-  <select id="cls"><option value="">Urban and rural</option><option>Rural</option><option>Urban</option></select>
+<div class="grid">
+<div class="rail">
+  <h2>Find a county</h2>
+  <input id="q" type="search" placeholder="Search by name...">
+  <div class="selrow">
+    <select id="basin"><option value="">All basins</option><option>Ohio River</option><option>Chesapeake Bay</option></select>
+    <select id="cls"><option value="">Urban &amp; rural</option><option>Rural</option><option>Urban</option></select>
+  </div>
+  <div class="multi" id="multi">
+    <button class="mbtn" id="mbtn" type="button">Select specific counties &#9662;</button>
+    <div class="panel" id="panel" hidden>
+      <div class="panelhd"><span>Tick several to compare</span><button id="mclear" type="button">Clear</button></div>
+      <div class="plist" id="plist"></div>
+    </div>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <h2 class="mt">When the trouble stacks up</h2>
+  <p class="exl">Check the risks that matter to you. A county has to meet <b>every one you check</b> to show up as a match. Tap the <b>?</b> beside any risk to see why it matters.</p>
+  <div class="facs" id="facs"></div>
+  <label class="only"><input type="checkbox" id="only"> Show only matching counties</label>
+  <button class="reset" id="reset">Clear all filters</button>
 </div>
 
-<div class="tw"><table><thead><tr id="th"></tr></thead><tbody id="tb"></tbody></table></div>
-
-<div class="note" id="ratingnote"></div>
-
-<footer>
-<b>Source.</b> <b>data/wv_county_profile.csv</b>. Disaster counts and FEMA totals reconcile exactly to the Atlas of Accountability 2011&ndash;2024 workbook on all 55 counties.
-See <a href="methodology.html">About the data</a> for every column and where it comes from.<br>
-<b>Limitations.</b> Buyout years are missing for 45% of properties. Data centers, coal plants, mining, and landownership are <b>not</b> in this file.
-</footer>
+<div class="main">
+  <div class="summary" id="summary"></div>
+  <div class="tw"><table><thead><tr id="th"></tr></thead><tbody id="tb"></tbody></table></div>
+  <div class="note" id="ratingnote"></div>
+  <footer>
+  <b>Source.</b> Built from <b>data/wv_county_profile.csv</b>; disaster counts and FEMA totals reconcile to the Atlas of Accountability 2011&ndash;2024 workbook on all 55 counties. See <a href="methodology.html">About the data</a> for every column and its source. <b>Not in this file yet:</b> data centers, coal plants, mining, and landownership.
+  </footer>
+</div>
+</div>
 </div>
 
 <script>
@@ -88,9 +180,11 @@ function parseCSV(t){
   return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])));
 }
 const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
-let D=[], sort='dis', asc=false;
+const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)];};
+const q3=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(.75*(s.length-1))];};
 
-// Column order is shared with the compound risk explorer.
+let D=[], sort='dis', asc=false, picked=new Set(), sel=new Set(), open=null, tip=null, onlyMatch=false, Q={};
+
 // Atlas of Accountability data first, then flood and hazard data.
 const COLS=[
   ['c',    'County',          't'],
@@ -98,7 +192,7 @@ const COLS=[
   ['fema', 'FEMA $',          'm'],
   ['pc',   'FEMA/person',     'm'],
   ['svi',  'SVI',             'd'],
-  ['saidi','Outage min/yr',   'n'],
+  ['saidi','Outage hrs/yr',   'h'],
   ['old',  '% 60+',           'p'],
   ['rate', 'Flood risk',      't', 1],
   ['natl', 'Natl flood %ile', 'x'],
@@ -107,6 +201,35 @@ const COLS=[
   ['buy',  'Buyouts',         'n'],
   ['eal',  'Flood loss/yr',   'm'],
   ['basin','Basin',           't', 1],
+];
+
+// Two kinds of cutoff. FIXED cutoffs (natl, dis, rl, buy, old) are the same
+// everywhere. WV-RELATIVE cutoffs (pc, fp, svi, sd) are drawn from West
+// Virginia's own 55-county distribution and have a {v} placeholder that init()
+// fills with the live boundary value, so the exact number a filter uses is
+// always shown and can never drift from the data.
+const FACTORS=[
+ // Ordered by what a resident or community feels first: the flood as lived,
+ // then what it costs homes and daily life, then who it hits hardest, and
+ // finally the big-picture ranking and the funding injustice.
+ {k:'dis',n:'Hit again and again',d:'5 or more federal disaster declarations, 2011&ndash;2024',f:d=>d.dis>=5,rel:0,
+  why:'A county that keeps getting declared is a county the next flood is already coming for. It is also the plainest number a legislator already understands, with nothing to explain.'},
+ {k:'rl', n:'Floods the same places over and over',d:'At least one FEMA repetitive loss area',f:d=>d.rl>0,rel:0,
+  why:'These are spots FEMA itself has flagged as flooding again and again. Only <b>11 of 55 counties</b> have one, so it is a sharp filter, and it is strong backing in a grant because the federal government has already admitted the problem is real.'},
+ {k:'buy',n:'Homes already bought out',d:'20 or more properties bought out',f:d=>d.buy>=20,rel:0,
+  why:'A buyout means the flooding got bad enough that taxpayers paid to move a family out for good. A high count next to more flooding means the job is not finished.'},
+ {k:'sd', n:'Power that keeps going out',d:'WV&rsquo;s top quarter for annual outages: {v} hours without power a year or more',f:d=>d.saidi>=Q.sd,rel:1,
+  why:'Flooding and blackouts feed on each other: no power means no pumps, no heat, no medical equipment, no way to call for help. Mason County families lose power more than <b>14 hours</b> a year on average.'},
+ {k:'svi',n:'Harder for families to bounce back',d:'WV&rsquo;s top quarter for how hard recovery is (CDC index): {v} or higher',f:d=>d.svi>=Q.svi,rel:1,
+  why:'Income, age, whether folks own a vehicle, how solid the housing is. Two counties can flood exactly the same and rebuild completely differently. This is what tells them apart.'},
+ {k:'old',n:'Lots of older neighbors',d:'A quarter or more of residents aged 60 or over',f:d=>d.old>=25,rel:0,
+  why:'Older folks are harder to get out ahead of a flood and slower to recover after. In West Virginia this is true almost everywhere, <b>52 of 55 counties</b>, so it rarely narrows things down. It is a fact about the whole state, not a way to tell counties apart.'},
+ {k:'fp', n:'Big share of land in the flood zone',d:'WV&rsquo;s top quarter for land in the flood zone: {v} or more of the county',f:d=>d.fp>=Q.fp,rel:1,
+  why:'How much of the county sits in the high-risk flood zone. This is the number for zoning, building permits, and deciding where not to put the next school or firehouse.'},
+ {k:'natl',n:'Floods among the worst in America',d:'Worst 5% of U.S. counties: 95th national percentile or higher',f:d=>d.natl>=95,rel:0,
+  why:'This is the number that proves it, and it is the one FEMA&rsquo;s own rating hides. FEMA grades flood risk <b>on a curve against the whole country</b>, which buries a small state where the water gets everywhere. The middle West Virginia county still ranks in the <b>96th percentile in the nation</b> for flood loss. A county can wear FEMA&rsquo;s &ldquo;Relatively Low&rdquo; tag and still be among the worst in America. This is the one cutoff measured against the country, not against West Virginia.'},
+ {k:'pc', n:'Shortchanged on federal dollars',d:'Below WV&rsquo;s median FEMA dollars per resident: {v} or less',f:d=>d.pc<=Q.pc,rel:1,
+  why:'Federal recovery money follows paperwork and declared damage, not real need. Half of West Virginia&rsquo;s counties have gotten back <b>$28 or less per person</b> in fourteen years. When a county floods this badly and still sees this little, it is carrying a risk Washington has not paid its share of.'},
 ];
 
 fetch('data/wv_county_profile.csv')
@@ -130,11 +253,15 @@ fetch('data/wv_county_profile.csv')
   });
 
 function init(){
-  // Disaster declarations are NOT summed across counties. A single event
-  // (a hurricane, a derecho) is declared across many counties at once, so
-  // adding the county columns double-counts the event. The county figure is
-  // "how many declarations touched this county", and it is not additive.
-  // Everything below is genuinely additive: dollars, properties, areas.
+  Q={fp:q3(D.map(d=>d.fp)),svi:q3(D.map(d=>d.svi)),sd:q3(D.map(d=>d.saidi)),pc:med(D.map(d=>d.pc))};
+  // Fill each WV-relative factor's {v} with the boundary value computed above,
+  // so every cutoff is shown as an exact number and stays tied to the data.
+  const bound={pc:'$'+Q.pc.toLocaleString(), fp:Q.fp.toFixed(1)+'%', svi:Q.svi.toFixed(2), sd:(Q.sd/60).toFixed(1)};
+  FACTORS.forEach(f=>{ if(f.rel && bound[f.k]) f.d=f.d.replace('{v}',bound[f.k]); });
+
+  // State totals. Disaster declarations are NOT summed across counties: one
+  // event is declared across many counties at once, so adding the county
+  // columns double-counts it. Everything else here is genuinely additive.
   document.getElementById('stats').innerHTML=[
     [D.length,'Counties'],
     [D[0].statedis,'Federal disaster declarations, statewide'],
@@ -145,6 +272,7 @@ function init(){
     [D.filter(d=>d.natl>=90).length+' of '+D.length,'Counties above the 90th national flood percentile']
   ].map(x=>'<div class="st"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
 
+  // Column headers, built once; sort indicators update in draw().
   document.getElementById('th').innerHTML=COLS.map(c=>
     '<th data-k="'+c[0]+'"'+(c[3]?' class="grp"':'')+'>'+c[1]+'</th>').join('');
   document.querySelectorAll('th').forEach(h=>h.onclick=()=>{
@@ -152,50 +280,150 @@ function init(){
     if(k===sort) asc=!asc; else { sort=k; asc=(COLS.find(c=>c[0]===k)[2]==='t'); }
     draw();
   });
-  ['q','basin','cls'].forEach(id=>document.getElementById(id).oninput=draw);
 
-  const above90=D.filter(d=>d.natl>=90).length;
+  ['q','basin','cls'].forEach(id=>document.getElementById(id).oninput=draw);
+  document.getElementById('only').onchange=e=>{onlyMatch=e.target.checked;draw();};
+  document.getElementById('reset').onclick=()=>{
+    sel=new Set(); picked=new Set(); onlyMatch=false; open=null; tip=null;
+    document.getElementById('q').value=''; document.getElementById('basin').value=''; document.getElementById('cls').value='';
+    document.getElementById('only').checked=false;
+    buildPicker(); syncPicker(); draw();
+  };
+
+  // Multi-county picker.
+  buildPicker(); syncPicker();
+  document.getElementById('mbtn').onclick=e=>{e.stopPropagation();const p=document.getElementById('panel');p.hidden=!p.hidden;};
+  document.getElementById('mclear').onclick=()=>{picked=new Set();buildPicker();syncPicker();draw();};
+  document.addEventListener('click',e=>{
+    if(!document.getElementById('multi').contains(e.target)) document.getElementById('panel').hidden=true;
+  });
+
   const bad=D.filter(d=>d.rate==='Relatively Low' && d.natl>=99);
   document.getElementById('ratingnote').innerHTML=
-    '<b>Two flood columns, and they disagree on purpose.</b> <b>Flood risk</b> is FEMA’s own rating. It compares each county to the whole United States, '+
-    'which flattens a small state where flooding is everywhere. <b>Natl flood %ile</b> is where the county actually ranks nationally for flood loss. '+
-    'The median West Virginia county sits in the <b>96th percentile</b> and <b>'+above90+' of 55</b> are above the 90th. '+
-    'FEMA labels <b>'+bad.length+' counties “Relatively Low” that sit above the 99th national percentile</b>, including '+
-    bad.slice(0,3).map(d=>d.c+' ('+d.natl+')').join(', ')+'. <b>Sort by the percentile, not the rating.</b>'+
-    '<br><br><b>Do not add the Disasters column up.</b> One storm is declared across many counties at once, so summing the column counts the same event repeatedly. '+
-    'West Virginia has had <b>'+D[0].statedis+' federal disaster declarations</b> in total. The most any single county saw is <b>'+
-    Math.max(...D.map(d=>d.dis))+'</b> ('+D.find(d=>d.dis===Math.max(...D.map(x=>x.dis))).c+').';
+    '<b>The table has two flood columns, and they are supposed to disagree.</b> <b>Flood risk</b> is FEMA&rsquo;s own grade, set on a curve against the whole country, which buries a small state where the water gets everywhere. '+
+    '<b>Natl flood %ile</b> is where the county really ranks against the rest of America. FEMA still tags <b>'+bad.length+' counties &ldquo;Relatively Low&rdquo; that actually sit in the nation&rsquo;s worst 1%</b>, including '+
+    bad.slice(0,3).map(d=>d.c).join(', ')+'. <b>Go by the national ranking, not FEMA&rsquo;s tag.</b>';
   draw();
 }
 
+// Build the checkbox list of all counties, alphabetically.
+function buildPicker(){
+  const plist=document.getElementById('plist');
+  plist.innerHTML=[...D].sort((a,b)=>a.c.localeCompare(b.c)).map(d=>
+    '<label><input type="checkbox" value="'+d.c+'"'+(picked.has(d.c)?' checked':'')+'>'+d.c+'</label>').join('');
+  plist.querySelectorAll('input').forEach(cb=>cb.onchange=()=>{
+    cb.checked?picked.add(cb.value):picked.delete(cb.value); syncPicker(); draw();
+  });
+}
+// Reflect the current county selection in the chips row and the button label.
+function syncPicker(){
+  const chips=document.getElementById('chips');
+  chips.innerHTML=[...picked].sort().map(c=>
+    '<span class="chip">'+c+'<button type="button" data-c="'+c+'" aria-label="Remove '+c+'">&times;</button></span>').join('');
+  chips.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    picked.delete(b.dataset.c); buildPicker(); syncPicker(); draw();
+  });
+  const btn=document.getElementById('mbtn');
+  btn.textContent=picked.size?(picked.size+(picked.size===1?' county':' counties')+' selected ▾'):'Select specific counties ▾';
+  btn.classList.toggle('act',picked.size>0);
+}
+
+// Compound-risk factor checkboxes, with the WV / US / Fixed scope tag and the
+// per-factor explanation revealed by the ? button.
+function renderFacs(){
+  const F=document.getElementById('facs');
+  F.innerHTML='';
+  FACTORS.forEach(x=>{
+    const hits=D.filter(x.f).length;
+    const l=document.createElement('div'); l.className='fac'+(sel.has(x.k)?' on':'');
+    l.innerHTML='<input type="checkbox" id="f_'+x.k+'"'+(sel.has(x.k)?' checked':'')+'>'+
+      '<label class="lab" for="f_'+x.k+'"><b>'+x.n+'</b><em>'+x.d+'</em></label>'+
+      '<span class="ct">'+hits+'</span>'+
+      '<button class="qm" type="button" title="Why this filter?">?</button>';
+    l.querySelector('input').onchange=e=>{e.target.checked?sel.add(x.k):sel.delete(x.k);draw();};
+    l.querySelector('.qm').onclick=()=>{tip=(tip===x.k?null:x.k);draw();};
+    F.appendChild(l);
+    if(tip===x.k){const t=document.createElement('div');t.className='tip';t.innerHTML=x.why;F.appendChild(t);}
+  });
+}
+
+function evidence(d){
+  const parts=[];
+  parts.push('<b>'+d.c+' County</b> is in the <b>'+d.natl.toFixed(1)+'th percentile nationally</b> for flood loss rate, meaning its expected annual flood losses are worse than '+d.natl.toFixed(0)+'% of all counties in the United States. FEMA estimates it loses <b>$'+d.eal.toLocaleString()+' every year</b> to inland flooding.');
+  parts.push('Between 2011 and 2024 the county was included in <b>'+d.dis+' federal major disaster declaration'+(d.dis===1?'':'s')+'</b> and received <b>$'+d.fema.toLocaleString()+'</b> in FEMA Public Assistance and Hazard Mitigation funding, or <b>$'+d.pc+' per person</b>.');
+  const bits=[];
+  if(d.rl>0) bits.push('FEMA has designated <b>'+d.rl+' repetitive loss area'+(d.rl===1?'':'s')+'</b> here');
+  if(d.buy>0) bits.push('<b>'+d.buy.toLocaleString()+' propert'+(d.buy===1?'y has':'ies have')+'</b> been bought out and cleared');
+  if(d.fp>=Q.fp) bits.push('<b>'+d.fp+'%</b> of the county lies in the high-risk flood zone');
+  if(bits.length) parts.push(bits.join('. ').replace(/^(.)/,m=>m.toUpperCase())+'.');
+  const soc=[];
+  if(d.svi>=Q.svi) soc.push('one of the state&rsquo;s highest scores for how hard recovery would be (CDC index), at <b>'+d.svi.toFixed(2)+'</b>');
+  if(d.saidi>=Q.sd) soc.push('an average of <b>'+(d.saidi/60).toFixed(1)+' hours</b> without power each year');
+  if(d.old>=25) soc.push('<b>'+d.old+'%</b> of residents aged 60 or over');
+  if(soc.length) parts.push('Recovery will be harder here: the county has '+soc.join(', ')+'.');
+  return parts.map(p=>'<p>'+p+'</p>').join('');
+}
+
 function draw(){
+  renderFacs();
+
+  // Simple filters hard-narrow the row set; compound factors then highlight
+  // (or, with "show only matches", hard-filter) within it.
   const q=document.getElementById('q').value.toLowerCase();
   const b=document.getElementById('basin').value, cl=document.getElementById('cls').value;
-  const r=D.filter(x=>(!q||x.c.toLowerCase().includes(q))&&(!b||x.basin===b)&&(!cl||x.cls===cl));
+  const base=D.filter(x=>(!q||x.c.toLowerCase().includes(q))&&(!b||x.basin===b)&&(!cl||x.cls===cl)&&(!picked.size||picked.has(x.c)));
+  const act=FACTORS.filter(f=>sel.has(f.k));
+  const isMatch=d=>act.length>0 && act.every(f=>f.f(d));
+  const matched=base.filter(isMatch);
+
+  // Summary line, reflecting the current match set.
+  const s=document.getElementById('summary');
+  if(!act.length) s.innerHTML='All '+base.length+' counties shown. Check a box on the left to find the counties getting hit from several directions at once.';
+  else s.innerHTML='<b>'+matched.length+'</b> of '+D.length+' counties meet every box you checked. Together they are home to <b>'+
+    matched.reduce((a,d)=>a+d.pop,0).toLocaleString()+'</b> people, lose <b>$'+
+    (matched.reduce((a,d)=>a+d.eal,0)/1e6).toFixed(1)+'M</b> a year to flooding, and have gotten back <b>$'+
+    (matched.reduce((a,d)=>a+d.fema,0)/1e6).toFixed(1)+'M</b> in FEMA money since 2011.';
+
+  const rows=(onlyMatch && act.length) ? matched : base;
   const t=COLS.find(c=>c[0]===sort)[2];
-  r.sort((a,c)=>{
+  rows.sort((a,c)=>{
     const x=a[sort], y=c[sort];
     if(t==='t') return asc?String(x).localeCompare(y):String(y).localeCompare(x);
     return asc?x-y:y-x;
   });
-  const max={}; COLS.forEach(c=>{ if(c[2]!=='t'&&c[2]!=='x') max[c[0]]=Math.max(...D.map(d=>d[c[0]])); });
 
+  // "Worst in column" marker, computed over all 55 counties.
+  const max={}; COLS.forEach(c=>{ if(c[2]!=='t'&&c[2]!=='x') max[c[0]]=Math.max(...D.map(d=>d[c[0]])); });
   const fmt=(v,t)=>{
     if(v===''||v==null) return '<span style="color:var(--grey)">&ndash;</span>';
     if(t==='m') return '$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString());
     if(t==='p') return v.toFixed(1)+'%';
     if(t==='d') return v.toFixed(2);
     if(t==='n') return v.toLocaleString();
+    if(t==='h') return (v/60).toFixed(1);
     if(t==='x') return '<span class="natl'+(v>=95?' bad':'')+'">'+v.toFixed(1)+'</span>';
     if(v==='Ohio River')     return '<span class="pill ohio">Ohio</span>';
     if(v==='Chesapeake Bay') return '<span class="pill ches">Chesapeake</span>';
     return v;
   };
-  document.getElementById('tb').innerHTML=r.map(d=>'<tr>'+COLS.map(c=>{
-    const isnum=(c[2]!=='t');
-    const hi=max[c[0]]&&d[c[0]]===max[c[0]]&&max[c[0]]>0?' hi':'';
-    return '<td class="'+(isnum?'num':'')+hi+(c[3]?' grp':'')+'">'+fmt(d[c[0]],c[2])+'</td>';
-  }).join('')+'</tr>').join('');
+
+  let html='';
+  if(!rows.length) html='<tr><td colspan="'+COLS.length+'" style="padding:1rem;color:var(--grey)">No counties match. Loosen a filter on the left.</td></tr>';
+  rows.forEach(d=>{
+    const cls=act.length?(isMatch(d)?'hit':'miss'):'';
+    html+='<tr class="'+cls+'" data-c="'+d.c+'">'+COLS.map(c=>{
+      const isnum=(c[2]!=='t');
+      const hi=max[c[0]]&&d[c[0]]===max[c[0]]&&max[c[0]]>0?' hi':'';
+      return '<td class="'+(isnum?'num':'')+hi+(c[3]?' grp':'')+'">'+fmt(d[c[0]],c[2])+'</td>';
+    }).join('')+'</tr>';
+    if(open===d.c) html+='<tr class="ev"><td colspan="'+COLS.length+'"><div class="ev-box">'+
+      '<span class="h">Evidence paragraph &middot; '+d.c+' County</span>'+evidence(d)+
+      '<small>Source: Rebuild by Design, Atlas of Disaster; FEMA National Risk Index (December 2025); FEMA OpenFEMA, 2011&ndash;2024; CDC Social Vulnerability Index 2022; U.S. Energy Information Administration.</small>'+
+      '</div></td></tr>';
+  });
+  document.getElementById('tb').innerHTML=html;
+  document.querySelectorAll('#tb tr[data-c]').forEach(tr=>tr.onclick=()=>{open=(open===tr.dataset.c?null:tr.dataset.c);draw();});
+
   document.querySelectorAll('th').forEach(h=>{
     const c=COLS.find(c=>c[0]===h.dataset.k);
     h.className=(h.dataset.k===sort?'s'+(asc?' a':''):'')+(c[3]?' grp':'');

@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About the data &middot; Atlas of Disaster West Virginia</title>
 <style>
 :root{--head:#000;--crimson:#C0392B;--ink:#000;--grey:#555;--rule:#e2e2e2;--tint:#f4f4f4;--bg:#fff;--card:#fafafa;}
@@ -34,7 +36,8 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 <div class="brand">
   <span>Rebuild by Design &middot; Atlas of Disaster &middot; West Virginia</span>
-  <span><a href="./" style="color:var(--crimson)">County table</a> &nbsp;&middot;&nbsp; <a href="findings.html" style="color:var(--crimson)">Findings</a> &nbsp;&middot;&nbsp; <a href="explore.html" style="color:var(--crimson)">Explorer</a></span>
+  <!-- Findings link hidden until the Findings page is ready. -->
+  <span><a href="./" style="color:var(--crimson)">County table</a></span>
 </div>
 
 <h1>About the data</h1>
@@ -76,19 +79,19 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);font-si
 <td class="s"><a href="https://www.fema.gov/flood-maps/national-flood-hazard-layer">FEMA flood maps</a></td></tr>
 
 <tr><td class="c">Flood risk</td>
-<td>FEMA's rating of the county's overall flood risk, from Very Low to Very High. It combines expected damage, how vulnerable residents are, and how well the community can recover. <b>The rating is relative to the rest of the country</b>, so a "Relatively Low" county can still flood badly.</td>
+<td>FEMA's rating of the county's overall flood risk, from Very Low to Very High. It combines expected damage, how hard recovery would be for residents, and how well the community can bounce back. <b>The rating is graded on a curve against the rest of the country</b>, so a "Relatively Low" county can still flood badly.</td>
 <td class="s"><a href="https://hazards.fema.gov/nri/">FEMA National Risk Index</a></td></tr>
 
 <tr><td class="c">Natl flood %ile</td>
-<td>Where the county ranks against <b>every county in the United States</b> for flood loss. 99 means only 1% of U.S. counties lose more. <b>This is the number to trust.</b> FEMA's own "Flood risk" rating above is relative and compresses badly in a small state: it labels seven West Virginia counties "Relatively Low" that sit above the 99th national percentile, including Pleasants and Wirt at 99.9. The median West Virginia county is in the 96th percentile, and 45 of 55 are above the 90th.</td>
+<td>Where the county ranks against <b>every county in the United States</b> for flood loss. 99 means only 1% of U.S. counties lose more. <b>This is the number to trust.</b> FEMA's own "Flood risk" rating above is graded on a curve and buries a small state: it tags seven West Virginia counties "Relatively Low" that sit above the 99th national percentile, including Pleasants and Wirt at 99.9. The median West Virginia county is in the 96th percentile, and 45 of 55 are above the 90th.</td>
 <td class="s"><a href="https://hazards.fema.gov/nri/">FEMA National Risk Index</a></td></tr>
 
 <tr><td class="c">Flood loss/yr</td>
 <td>FEMA's estimate of how much money the county loses to flooding in an average year, across buildings, crops, and people. This is a <b>projection from a model</b>, not a record of what was actually lost.</td>
 <td class="s"><a href="https://hazards.fema.gov/nri/">FEMA National Risk Index</a></td></tr>
 
-<tr><td class="c">Outage min/yr</td>
-<td>How many minutes the average customer spent without power in 2023. Mason County is the worst in the state at 854 minutes, more than 14 hours.</td>
+<tr><td class="c">Outage hrs/yr</td>
+<td>How many hours the average customer spent without power in 2023, on average. Mason County is the worst in the state at more than 14 hours.</td>
 <td class="s"><a href="https://www.eia.gov/electricity/data/eia861/">U.S. Energy Information Administration</a></td></tr>
 
 <tr><td class="c">SVI</td>
